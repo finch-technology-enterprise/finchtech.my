@@ -23,7 +23,7 @@ export const metadata: Metadata = {
     template: '%s | Finch Technology Enterprise',
   },
   description:
-    'Finch Technology Enterprise: Specialized in high-performance VPN services (FinchVPN), custom software development, hosting infrastructure, and IT consultancy in Malaysia. House of NexMenu & GeraiKu.',
+    'Finch Technology Enterprise — custom software development, hosting infrastructure and IT consultancy for Malaysian businesses. House of NexMenu (QR ordering & kitchen display) & GeraiKu (storefront SaaS).',
   alternates: {
     canonical: 'https://finchtech.my',
   },
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     type: 'website',
     title: 'Finch Technology Enterprise | Software for Malaysian Businesses',
     description:
-      'Finch Technology Enterprise: Specialized in high-performance VPN services (FinchVPN), custom software development, hosting infrastructure, and IT consultancy in Malaysia. House of NexMenu & GeraiKu.',
+      'Finch Technology Enterprise — custom software development, hosting infrastructure and IT consultancy for Malaysian businesses. House of NexMenu & GeraiKu.',
     siteName: 'Finch Technology Enterprise',
     images: [
       {
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Finch Technology Enterprise | Software for Malaysian Businesses',
     description:
-      'Finch Technology Enterprise: Specialized in high-performance VPN services (FinchVPN), custom software development, hosting infrastructure, and IT consultancy in Malaysia. House of NexMenu & GeraiKu.',
+      'Finch Technology Enterprise — custom software development, hosting infrastructure and IT consultancy for Malaysian businesses. House of NexMenu & GeraiKu.',
     images: ['/og-image.png'],
   },
   icons: {
