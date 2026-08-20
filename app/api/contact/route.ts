@@ -3,7 +3,7 @@ import { ContactSchema, sendTelegram, sendEmail } from '@/lib/contact';
 import { verifyTurnstile } from '@/lib/turnstile';
 import { checkRateLimit } from '@/lib/rate-limit';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 const SUCCESS_MESSAGE = 'Your message has been sent successfully. We will get back to you soon!';
 
