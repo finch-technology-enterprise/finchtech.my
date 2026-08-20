@@ -125,25 +125,12 @@ export default function Nav() {
   return (
     <header
       className={cn(
-        // translucent material — apple-design:184
         'sticky top-0 z-50 w-full border-b border-white/10',
-        // dark default: rgba(11,12,16,0.6); light via data-theme
         'bg-[rgba(11,12,16,0.6)]',
         'backdrop-blur-[20px] saturate-[180%]',
-        // supports fallback — solid when backdrop-filter unsupported
-        'supports-[backdrop-filter]:bg-[rgba(11,12,16,0.6)]',
-        // light theme override via data-theme attribute on html
-        'data-[theme=light]:bg-[rgba(255,255,255,0.6)]',
-        // explicit light selector for html[data-theme=light] context
         '[html[data-theme=light]_&]:bg-[rgba(255,255,255,0.6)]',
         '[html[data-theme=light]_&]:border-black/10',
       )}
-      // fallback bg for no backdrop-filter — inline style ensures solid when unsupported
-      style={
-        {
-          // CSS var hint — consumed by globals if needed
-        } as React.CSSProperties
-      }
     >
       {/* solid fallback layer for browsers without backdrop-filter */}
       <div

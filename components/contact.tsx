@@ -308,7 +308,11 @@ export default function Contact() {
             ) : (
               <p className="text-xs opacity-50">Verification not configured (set NEXT_PUBLIC_TURNSTILE_SITE_KEY).</p>
             )}
-            {errors.turnstileToken && <p className="mt-1 text-xs text-red-400">{errors.turnstileToken[0]}</p>}
+            {errors.turnstileToken && (
+              <p id="contact-turnstile-error" className="mt-1 text-xs text-red-400" role="alert">
+                {errors.turnstileToken[0]}
+              </p>
+            )}
           </div>
 
           {/* Load Turnstile script once */}

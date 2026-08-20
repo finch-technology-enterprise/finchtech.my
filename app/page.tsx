@@ -6,7 +6,7 @@ import Contact from '@/components/contact';
 
 export default function Page() {
   return (
-    <main>
+    <main id="main">
       <Hero />
       <Products />
       <Expertise />

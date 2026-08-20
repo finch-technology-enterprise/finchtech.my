@@ -18,9 +18,12 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://finchtech.my'),
-  title: 'Finch Technology Enterprise | Software for Malaysian Businesses',
+  title: {
+    default: 'Finch Technology Enterprise | Software for Malaysian Businesses',
+    template: '%s | Finch Technology Enterprise',
+  },
   description:
-    'Finch Technology Enterprise: Specialized in high-performance VPN services (FinchVPN), custom software development, hosting infrastructure, and IT consultancy in Malaysia.',
+    'Finch Technology Enterprise: Specialized in high-performance VPN services (FinchVPN), custom software development, hosting infrastructure, and IT consultancy in Malaysia. House of NexMenu & GeraiKu.',
   alternates: {
     canonical: 'https://finchtech.my',
   },
@@ -29,7 +32,7 @@ export const metadata: Metadata = {
     type: 'website',
     title: 'Finch Technology Enterprise | Software for Malaysian Businesses',
     description:
-      'Finch Technology Enterprise: Specialized in high-performance VPN services (FinchVPN), custom software development, hosting infrastructure, and IT consultancy in Malaysia.',
+      'Finch Technology Enterprise: Specialized in high-performance VPN services (FinchVPN), custom software development, hosting infrastructure, and IT consultancy in Malaysia. House of NexMenu & GeraiKu.',
     siteName: 'Finch Technology Enterprise',
     images: [
       {
@@ -44,7 +47,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Finch Technology Enterprise | Software for Malaysian Businesses',
     description:
-      'Finch Technology Enterprise: Specialized in high-performance VPN services (FinchVPN), custom software development, hosting infrastructure, and IT consultancy in Malaysia.',
+      'Finch Technology Enterprise: Specialized in high-performance VPN services (FinchVPN), custom software development, hosting infrastructure, and IT consultancy in Malaysia. House of NexMenu & GeraiKu.',
     images: ['/og-image.png'],
   },
   icons: {
@@ -56,6 +59,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} ${jetbrainsMono.variable} min-h-screen antialiased`}>
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-[var(--bg)] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:ring-2 focus:ring-white/20"
+        >
+          Skip to content
+        </a>
         <Nav />
         {children}
         <Footer />
