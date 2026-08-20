@@ -93,7 +93,9 @@ describe('cn', () => {
 describe('Landing composition', () => {
   it('renders hero CTA and both product cards', () => {
     render(<Page />);
-    expect(screen.getByRole('heading', { name: /Two products\. One partner\./i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /One house\. Two platforms\. Built for Malaysian commerce\./i }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Explore Products/ })).toBeInTheDocument();
     expect(screen.getAllByText(/NexMenu/).length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText(/GeraiKu/).length).toBeGreaterThanOrEqual(1);
@@ -109,7 +111,9 @@ describe('Light IA', () => {
   });
   it('landing has hero + products + contact on light paper', () => {
     render(<Page />);
-    expect(screen.getByRole('heading', { name: /Two products\. One partner\./i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /One house\. Two platforms\. Built for Malaysian commerce\./i }),
+    ).toBeInTheDocument();
     expect(screen.getAllByText(/NexMenu/).length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText(/GeraiKu/).length).toBeGreaterThanOrEqual(1);
   });
