@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "chrome-devtools": { "enabled": true },
+    "cloudflare-api": { "enabled": true },
+    "cloudflare-bindings": { "enabled": true },
+    "cloudflare-builds": { "enabled": true },
+    "cloudflare-docs": { "enabled": true },
+    "cloudflare-observability": { "enabled": true },
+    "context7": { "enabled": true },
+    "github-my-johnlee": { "enabled": true },
+    "playwright": { "enabled": true }
+  }
+}
