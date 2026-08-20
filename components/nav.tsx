@@ -88,7 +88,7 @@ function ThemeToggle() {
       type="button"
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
       onClick={toggle}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-200"
+      className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 transition hover:bg-slate-50 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
     >
       {theme === 'light' ? (
         <Moon className="h-4 w-4" aria-hidden />
@@ -101,9 +101,16 @@ function ThemeToggle() {
 
 export default function Nav() {
   const [open, setOpen] = React.useState(false);
+  const [scrolled, setScrolled] = React.useState(false);
   const prefersReducedMotion = useReducedMotion();
 
-  // Close on escape
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   React.useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -113,7 +120,6 @@ export default function Nav() {
     return () => document.removeEventListener('keydown', onKey);
   }, [open]);
 
-  // Lock body scroll when sheet open (optional, lightweight)
   React.useEffect(() => {
     if (open) document.body.style.overflow = 'hidden';
     else document.body.style.overflow = '';
@@ -125,12 +131,12 @@ export default function Nav() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 w-full border-b border-slate-200 shadow-sm',
-        'bg-[rgba(255,255,255,0.85)]',
-        'backdrop-blur-[20px] saturate-[120%]',
+        'sticky top-0 z-50 w-full border-b backdrop-blur-[20px] saturate-[120%] transition-shadow duration-300',
+        scrolled
+          ? 'border-slate-200/80 bg-[rgba(255,255,255,0.92)] shadow-[0_1px_3px_rgba(15,23,42,0.06),0_8px_24px_rgba(15,23,42,0.04)]'
+          : 'border-slate-200 bg-[rgba(255,255,255,0.85)] shadow-sm',
       )}
     >
-      {/* solid fallback layer for browsers without backdrop-filter */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10 bg-[var(--bg)] opacity-0 supports-[backdrop-filter]:opacity-0 [@supports_not_(backdrop-filter:blur(0))]:opacity-100"
@@ -140,18 +146,22 @@ export default function Nav() {
         className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6"
         aria-label="Primary"
       >
-        <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
+        <Link
+          href="/"
+          className="flex items-center gap-2 rounded-md font-semibold tracking-tight focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 active:scale-[0.98]"
+        >
           <span className="text-[15px]">Finch Technology</span>
-          <span className="hidden text-sm font-normal text-slate-500 sm:inline">Enterprise</span>
+          <span className="hidden text-sm font-normal tracking-normal text-slate-500 sm:inline">
+            Enterprise
+          </span>
         </Link>
 
-        {/* desktop links */}
-        <ul className="hidden items-center gap-6 md:flex" role="list">
+        <ul className="hidden items-center gap-1 md:flex" role="list">
           {NAV_LINKS.map((l) => (
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="text-sm font-medium text-slate-700 transition hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-200"
+                className="rounded-md px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50 hover:text-slate-900 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
               >
                 {l.label}
               </Link>
@@ -167,24 +177,23 @@ export default function Nav() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white hover:bg-slate-50 md:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white transition hover:bg-slate-50 active:scale-[0.96] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 md:hidden"
           >
             {open ? <X className="h-4 w-4" aria-hidden /> : <Menu className="h-4 w-4" aria-hidden />}
           </button>
         </div>
       </nav>
 
-      {/* mobile sheet */}
       <AnimatePresence>
         {open && (
           <>
             <motion.div
               aria-hidden
-              className="fixed inset-0 top-14 z-40 bg-black/10 md:hidden"
+              className="fixed inset-0 top-14 z-40 bg-slate-900/10 backdrop-blur-[2px] md:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={prefersReducedMotion ? { duration: 0.15 } : { duration: 0.2 }}
+              transition={prefersReducedMotion ? { duration: 0.12 } : { duration: 0.22, ease: 'easeOut' }}
               onClick={() => setOpen(false)}
             />
             <motion.div
@@ -192,36 +201,45 @@ export default function Nav() {
               role="dialog"
               aria-modal="true"
               aria-label="Navigation menu"
-              className="fixed inset-x-0 top-14 z-50 border-b border-slate-200 bg-[rgba(255,255,255,0.95)] p-4 backdrop-blur-[20px] md:hidden"
+              className="fixed inset-x-0 top-14 z-50 border-b border-slate-200 bg-[rgba(255,255,255,0.97)] p-4 shadow-[0_8px_24px_rgba(15,23,42,0.08)] backdrop-blur-[16px] md:hidden"
               initial={
-                prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.98 }
+                prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.98, filter: 'blur(4px)' }
               }
               animate={
-                prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }
+                prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }
               }
-              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.98 }}
+              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.98, filter: 'blur(4px)' }}
               transition={
                 prefersReducedMotion
-                  ? { duration: 0.15 }
+                  ? { duration: 0.14 }
                   : {
                       type: 'spring',
                       damping: 1,
-                      stiffness: 260,
-                      mass: 0.3,
+                      stiffness: 300,
+                      mass: 0.32,
                     }
               }
             >
               <ul className="flex flex-col gap-1" role="list">
-                {NAV_LINKS.map((l) => (
-                  <li key={l.href}>
+                {NAV_LINKS.map((l, i) => (
+                  <motion.li
+                    key={l.href}
+                    initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: -6 }}
+                    animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, x: 0 }}
+                    transition={
+                      prefersReducedMotion
+                        ? { duration: 0.12, delay: i * 0.02 }
+                        : { type: 'spring', damping: 1, stiffness: 260, delay: i * 0.03 }
+                    }
+                  >
                     <Link
                       href={l.href}
                       onClick={() => setOpen(false)}
-                      className="block rounded-md px-3 py-2.5 text-sm font-medium hover:bg-slate-100"
+                      className="block rounded-md px-3 py-2.5 text-sm font-medium transition hover:bg-slate-100 active:scale-[0.98]"
                     >
                       {l.label}
                     </Link>
-                  </li>
+                  </motion.li>
                 ))}
               </ul>
             </motion.div>
