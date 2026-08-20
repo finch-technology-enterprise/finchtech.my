@@ -7,20 +7,28 @@ import { ArrowRight } from 'lucide-react';
 export default function Hero() {
   const prefersReducedMotion = useReducedMotion();
 
+  // Apple §4: critically damped (damping 1.0) — no bounce, compositor-only (opacity/transform).
+  // Keep hero entrance calm: gentle fade + tiny 4px lift, spring with natural settle, not a jump.
   const reveal = prefersReducedMotion
-    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.16 } }
+    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.18 } }
     : {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        transition: { duration: 0.4, ease: 'easeOut' as const },
+        initial: { opacity: 0, y: 4 },
+        animate: { opacity: 1, y: 0 },
+        transition: { type: 'spring' as const, damping: 1, stiffness: 420, mass: 0.28 },
       };
 
   const terminalReveal = prefersReducedMotion
-    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.16, delay: 0.06 } }
+    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.18, delay: 0.06 } }
     : {
-        initial: { opacity: 0 },
-        animate: { opacity: 1 },
-        transition: { duration: 0.4, ease: 'easeOut' as const, delay: 0.1 },
+        initial: { opacity: 0, y: 6, scale: 0.995 },
+        animate: { opacity: 1, y: 0, scale: 1 },
+        transition: {
+          type: 'spring' as const,
+          damping: 1,
+          stiffness: 360,
+          mass: 0.32,
+          delay: 0.1,
+        },
       };
 
   return (
@@ -66,8 +74,8 @@ export default function Hero() {
               animate={reveal.animate}
               transition={
                 prefersReducedMotion
-                  ? { duration: 0.16, delay: 0.04 }
-                  : { duration: 0.4, ease: 'easeOut' as const, delay: 0.06 }
+                  ? { duration: 0.18, delay: 0.04 }
+                  : { type: 'spring', damping: 1, stiffness: 420, mass: 0.28, delay: 0.05 }
               }
             >
               NexMenu &amp; GeraiKu in production — we tailor, host and integrate payments, printers,
@@ -80,8 +88,8 @@ export default function Hero() {
               animate={reveal.animate}
               transition={
                 prefersReducedMotion
-                  ? { duration: 0.16, delay: 0.08 }
-                  : { duration: 0.4, ease: 'easeOut' as const, delay: 0.1 }
+                  ? { duration: 0.18, delay: 0.08 }
+                  : { type: 'spring', damping: 1, stiffness: 420, mass: 0.28, delay: 0.08 }
               }
             >
               <Link
@@ -105,7 +113,8 @@ export default function Hero() {
           </div>
 
           <motion.div
-            className="relative"
+            className="relative will-change-transform"
+            style={{ willChange: 'transform, opacity' as const }}
             initial={terminalReveal.initial}
             animate={terminalReveal.animate}
             transition={terminalReveal.transition}

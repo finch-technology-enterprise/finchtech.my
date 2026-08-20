@@ -208,10 +208,10 @@ export default function Nav() {
               aria-modal="true"
               aria-label="Navigation menu"
               className="fixed inset-x-0 top-14 z-50 border-b border-slate-200 bg-[rgba(255,255,255,0.97)] p-4 shadow-[0_8px_24px_rgba(15,23,42,0.08)] backdrop-blur-[16px] md:hidden"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.18, ease: 'easeOut' as const }}
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ type: 'spring' as const, damping: 1, stiffness: 420, mass: 0.26 }}
             >
               <ul className="flex flex-col gap-1" role="list">
                 {NAV_LINKS.map((l, i) => (

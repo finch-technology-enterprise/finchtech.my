@@ -1,7 +1,7 @@
 'use client';
 
 import { Plug, Server, Wrench } from 'lucide-react';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 
 const CARDS = [
   {
@@ -25,13 +25,18 @@ const CARDS = [
 ] as const;
 
 export default function Expertise() {
+  const prefersReducedMotion = useReducedMotion();
   return (
     <section id="expertise" aria-label="Expertise" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+        initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 4 }}
+        whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.3, ease: 'easeOut' as const }}
+        transition={
+          prefersReducedMotion
+            ? { duration: 0.16 }
+            : { type: 'spring' as const, damping: 1, stiffness: 420, mass: 0.28 }
+        }
       >
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">Capabilities</p>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Custom where it counts</h2>
@@ -41,10 +46,16 @@ export default function Expertise() {
         {CARDS.map(({ icon: Icon, title, desc, tag }, i) => (
           <motion.div
             key={title}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
+            initial={
+              prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 4, scale: 0.998 }
+            }
+            whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
             viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.3, ease: 'easeOut' as const, delay: i * 0.04 }}
+            transition={
+              prefersReducedMotion
+                ? { duration: 0.16, delay: i * 0.03 }
+                : { type: 'spring' as const, damping: 1, stiffness: 420, mass: 0.28, delay: i * 0.06 }
+            }
             className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition will-change-transform hover:-translate-y-0.5 hover:shadow-md"
           >
             <div className="h-1 w-8 rounded-full bg-[var(--amber)]" aria-hidden />

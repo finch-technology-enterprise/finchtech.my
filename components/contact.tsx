@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { ContactSchema } from '@/lib/contact';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -103,6 +103,8 @@ export default function Contact() {
     setForm((f) => ({ ...f, turnstileToken: '' }));
   }, []);
 
+  const prefersReducedMotion = useReducedMotion();
+
   function validate(): boolean {
     const res = ContactSchema.safeParse({
       name: form.name,
@@ -171,10 +173,14 @@ export default function Contact() {
   return (
     <section id="contact" aria-label="Contact" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+        initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 4 }}
+        whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.3, ease: 'easeOut' as const }}
+        transition={
+          prefersReducedMotion
+            ? { duration: 0.16 }
+            : { type: 'spring' as const, damping: 1, stiffness: 420, mass: 0.28 }
+        }
       >
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">Get in touch</p>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Let&apos;s build your workflow</h2>
@@ -186,10 +192,14 @@ export default function Contact() {
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.2fr]">
         <motion.div
           className="space-y-6 rounded-2xl border border-sky-100 bg-[#e0f2fe]/60 p-6"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 4 }}
+          whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.3, ease: 'easeOut' as const, delay: 0.06 }}
+          transition={
+            prefersReducedMotion
+              ? { duration: 0.16, delay: 0.04 }
+              : { type: 'spring' as const, damping: 1, stiffness: 420, mass: 0.28, delay: 0.04 }
+          }
         >
           <div>
             <span className="inline-flex rounded-full bg-[var(--sky)] px-2.5 py-1 text-xs font-medium text-white">
@@ -229,10 +239,14 @@ export default function Contact() {
           onSubmit={onSubmit}
           noValidate
           className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 4 }}
+          whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.3, ease: 'easeOut' as const, delay: 0.1 }}
+          transition={
+            prefersReducedMotion
+              ? { duration: 0.16, delay: 0.08 }
+              : { type: 'spring' as const, damping: 1, stiffness: 420, mass: 0.28, delay: 0.08 }
+          }
         >
           {/* Honeypot — hidden from users, bots fill it */}
           <div className="hidden" aria-hidden="true">
