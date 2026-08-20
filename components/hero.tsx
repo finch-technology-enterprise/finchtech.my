@@ -1,35 +1,22 @@
 'use client';
 
 import Link from 'next/link';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 
 export default function Hero() {
-  const prefersReducedMotion = useReducedMotion();
 
-  // Apple §4: critically damped (damping 1.0) — no bounce, compositor-only (opacity/transform).
-  // Keep hero entrance calm: gentle fade + tiny 4px lift, spring with natural settle, not a jump.
-  const reveal = prefersReducedMotion
-    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.18 } }
-    : {
-        initial: { opacity: 0, y: 4 },
-        animate: { opacity: 1, y: 0 },
-        transition: { type: 'spring' as const, damping: 1, stiffness: 420, mass: 0.28 },
-      };
+  const reveal = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    transition: { duration: 0.35, ease: 'easeOut' as const },
+  };
 
-  const terminalReveal = prefersReducedMotion
-    ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.18, delay: 0.06 } }
-    : {
-        initial: { opacity: 0, y: 6, scale: 0.995 },
-        animate: { opacity: 1, y: 0, scale: 1 },
-        transition: {
-          type: 'spring' as const,
-          damping: 1,
-          stiffness: 360,
-          mass: 0.32,
-          delay: 0.1,
-        },
-      };
+  const terminalReveal = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    transition: { duration: 0.35, ease: 'easeOut' as const, delay: 0.12 },
+  };
 
   return (
     <section
@@ -72,11 +59,7 @@ export default function Hero() {
               className="mt-4 max-w-xl text-base leading-relaxed text-white/70 sm:text-[17px] sm:leading-7"
               initial={reveal.initial}
               animate={reveal.animate}
-              transition={
-                prefersReducedMotion
-                  ? { duration: 0.18, delay: 0.04 }
-                  : { type: 'spring', damping: 1, stiffness: 420, mass: 0.28, delay: 0.05 }
-              }
+              transition={{ duration: 0.35, ease: 'easeOut' as const, delay: 0.06 }}
             >
               NexMenu &amp; GeraiKu in production — we tailor, host and integrate payments, printers,
               workflows, SLAs.
@@ -86,11 +69,7 @@ export default function Hero() {
               className="mt-8 flex flex-wrap gap-3"
               initial={reveal.initial}
               animate={reveal.animate}
-              transition={
-                prefersReducedMotion
-                  ? { duration: 0.18, delay: 0.08 }
-                  : { type: 'spring', damping: 1, stiffness: 420, mass: 0.28, delay: 0.08 }
-              }
+              transition={{ duration: 0.35, ease: 'easeOut' as const, delay: 0.1 }}
             >
               <Link
                 href="#products"
@@ -113,8 +92,7 @@ export default function Hero() {
           </div>
 
           <motion.div
-            className="relative will-change-transform"
-            style={{ willChange: 'transform, opacity' as const }}
+            className="relative"
             initial={terminalReveal.initial}
             animate={terminalReveal.animate}
             transition={terminalReveal.transition}

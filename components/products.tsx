@@ -1,33 +1,25 @@
 'use client';
 
 import { QrCode, Store, ArrowUpRight } from 'lucide-react';
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card';
 
 export default function Products() {
-  const prefersReducedMotion = useReducedMotion();
 
-  const cardMotion = (delay: number) =>
-    prefersReducedMotion
-      ? { initial: { opacity: 0 }, whileInView: { opacity: 1 }, transition: { duration: 0.18, delay } }
-      : {
-          initial: { opacity: 0, y: 4, scale: 0.997 },
-          whileInView: { opacity: 1, y: 0, scale: 1 },
-          viewport: { once: true, margin: '-60px' as const },
-          transition: { type: 'spring' as const, damping: 1, stiffness: 420, mass: 0.28, delay },
-        };
+  const cardMotion = (delay: number) => ({
+    initial: { opacity: 0 },
+    whileInView: { opacity: 1 },
+    viewport: { once: true, margin: '-60px' as const },
+    transition: { duration: 0.35, ease: 'easeOut' as const, delay },
+  });
 
   return (
     <section id="products" aria-label="Products" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <motion.div
-        initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 4 }}
-        whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={{ once: true, margin: '-80px' }}
-        transition={
-          prefersReducedMotion
-            ? { duration: 0.16 }
-            : { type: 'spring' as const, damping: 1, stiffness: 420, mass: 0.28 }
-        }
+        transition={{ duration: 0.35, ease: 'easeOut' as const }}
       >
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">House brands</p>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Products</h2>
