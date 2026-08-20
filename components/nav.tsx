@@ -26,7 +26,7 @@ function applyTheme(theme: 'light' | 'dark') {
 }
 
 function ThemeToggle() {
-  const [theme, setTheme] = React.useState<'light' | 'dark'>('dark');
+  const [theme, setTheme] = React.useState<'light' | 'dark'>('light');
   const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
@@ -88,7 +88,7 @@ function ThemeToggle() {
       type="button"
       aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
       onClick={toggle}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/5 text-current backdrop-blur hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+      className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-200"
     >
       {theme === 'light' ? (
         <Moon className="h-4 w-4" aria-hidden />
@@ -125,11 +125,9 @@ export default function Nav() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 w-full border-b border-white/10',
-        'bg-[rgba(11,12,16,0.6)]',
-        'backdrop-blur-[20px] saturate-[180%]',
-        '[html[data-theme=light]_&]:bg-[rgba(255,255,255,0.6)]',
-        '[html[data-theme=light]_&]:border-black/10',
+        'sticky top-0 z-50 w-full border-b border-slate-200 shadow-sm',
+        'bg-[rgba(255,255,255,0.85)]',
+        'backdrop-blur-[20px] saturate-[120%]',
       )}
     >
       {/* solid fallback layer for browsers without backdrop-filter */}
@@ -144,7 +142,7 @@ export default function Nav() {
       >
         <Link href="/" className="flex items-center gap-2 font-semibold tracking-tight">
           <span className="text-[15px]">Finch Technology</span>
-          <span className="hidden text-sm font-normal opacity-60 sm:inline">Enterprise</span>
+          <span className="hidden text-sm font-normal text-slate-500 sm:inline">Enterprise</span>
         </Link>
 
         {/* desktop links */}
@@ -153,22 +151,12 @@ export default function Nav() {
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="text-sm font-medium opacity-80 transition hover:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+                className="text-sm font-medium text-slate-700 transition hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-200"
               >
                 {l.label}
               </Link>
             </li>
           ))}
-          <li>
-            <a
-              href="https://dash.finchtech.my"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex h-8 items-center rounded-md border border-white/15 bg-white/5 px-3 text-sm font-medium backdrop-blur hover:bg-white/10"
-            >
-              Client Portal
-            </a>
-          </li>
         </ul>
 
         <div className="flex items-center gap-2">
@@ -179,7 +167,7 @@ export default function Nav() {
             aria-expanded={open}
             aria-controls="mobile-nav"
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-white/10 bg-white/5 backdrop-blur hover:bg-white/10 md:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-200 bg-white hover:bg-slate-50 md:hidden"
           >
             {open ? <X className="h-4 w-4" aria-hidden /> : <Menu className="h-4 w-4" aria-hidden />}
           </button>
@@ -192,7 +180,7 @@ export default function Nav() {
           <>
             <motion.div
               aria-hidden
-              className="fixed inset-0 top-14 z-40 bg-black/40 md:hidden"
+              className="fixed inset-0 top-14 z-40 bg-black/10 md:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -204,7 +192,7 @@ export default function Nav() {
               role="dialog"
               aria-modal="true"
               aria-label="Navigation menu"
-              className="fixed inset-x-0 top-14 z-50 border-b border-white/10 bg-[rgba(11,12,16,0.95)] p-4 backdrop-blur-[20px] md:hidden [html[data-theme=light]_&]:bg-[rgba(255,255,255,0.95)]"
+              className="fixed inset-x-0 top-14 z-50 border-b border-slate-200 bg-[rgba(255,255,255,0.95)] p-4 backdrop-blur-[20px] md:hidden"
               initial={
                 prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.98 }
               }
@@ -229,22 +217,12 @@ export default function Nav() {
                     <Link
                       href={l.href}
                       onClick={() => setOpen(false)}
-                      className="block rounded-md px-3 py-2.5 text-sm font-medium hover:bg-white/10"
+                      className="block rounded-md px-3 py-2.5 text-sm font-medium hover:bg-slate-100"
                     >
                       {l.label}
                     </Link>
                   </li>
                 ))}
-                <li className="pt-2">
-                  <a
-                    href="https://dash.finchtech.my"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block rounded-md border border-white/15 bg-white/5 px-3 py-2.5 text-center text-sm font-medium hover:bg-white/10"
-                  >
-                    Client Portal
-                  </a>
-                </li>
               </ul>
             </motion.div>
           </>

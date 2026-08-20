@@ -41,11 +41,11 @@ export default function Hero() {
             animate={reveal.animate}
             transition={reveal.transition}
           >
-            Software for Malaysian businesses
+            Two products. One partner.
           </motion.h1>
 
           <motion.p
-            className="mt-4 max-w-xl text-base leading-relaxed opacity-70 sm:text-lg"
+            className="mt-4 max-w-xl text-base leading-relaxed text-slate-600 sm:text-lg"
             initial={reveal.initial}
             animate={reveal.animate}
             transition={
@@ -54,8 +54,8 @@ export default function Hero() {
                 : { type: 'spring', damping: 1, stiffness: 260, mass: 0.35, delay: 0.06 }
             }
           >
-            We build reliable, high-performance software — from QR ordering to multi-tenant
-            storefronts — tailored for Malaysia.
+            NexMenu &amp; GeraiKu in production — and we tailor them, host them, and integrate them
+            to your workflow.
           </motion.p>
 
           <motion.div
@@ -70,13 +70,13 @@ export default function Hero() {
           >
             <Link
               href="#products"
-              className="inline-flex h-10 items-center justify-center rounded-md bg-[var(--accent,#66fcf1)] px-6 text-sm font-medium text-[var(--bg,#0b0c10)] hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+              className="inline-flex h-10 items-center justify-center rounded-md bg-[var(--accent,#0f172a)] px-6 text-sm font-medium text-white hover:bg-[var(--accent-hover,#1e293b)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
             >
               Explore Products
             </Link>
             <Link
               href="#contact"
-              className="inline-flex h-10 items-center justify-center rounded-md border border-white/15 bg-white/5 px-6 text-sm font-medium backdrop-blur hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+              className="inline-flex h-10 items-center justify-center rounded-md border border-slate-200 bg-white px-6 text-sm font-medium text-slate-900 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-200"
             >
               Start a project
               <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
@@ -86,7 +86,7 @@ export default function Hero() {
 
         {/* terminal card — transform/opacity only, will-change hint */}
         <motion.div
-          className="will-change-transform rounded-xl border border-white/10 bg-white/[0.04] p-5 shadow-lg backdrop-blur sm:p-6"
+          className="will-change-transform rounded-xl border border-slate-200 bg-slate-50 p-5 shadow-sm sm:p-6"
           style={{ willChange: 'transform, opacity' }}
           initial={terminalReveal.initial}
           animate={terminalReveal.animate}
@@ -97,26 +97,26 @@ export default function Hero() {
             <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
             <span className="h-2.5 w-2.5 rounded-full bg-yellow-400/80" />
             <span className="h-2.5 w-2.5 rounded-full bg-green-400/80" />
-            <span className="ml-2 font-mono text-xs opacity-50">index.blade.php</span>
+            <span className="ml-2 font-mono text-xs text-slate-500">index.blade.php</span>
           </div>
-          <pre className="overflow-x-auto font-mono text-[13px] leading-relaxed">
+          <pre className="overflow-x-auto font-mono text-[13px] leading-relaxed text-slate-800">
             <code>
-              <span className="opacity-60">{`// FinchTech — Enterprise`}</span>
+              <span className="text-slate-500">{`// FinchTech — Enterprise`}</span>
               {'\n'}
-              <span className="text-[#66fcf1]">FinchTech</span>
+              <span className="text-slate-900">FinchTech</span>
               <span>{`.create(`}</span>
-              <span className="text-[#a5d6ff]">&apos;Enterprise&apos;</span>
+              <span className="text-slate-700">&apos;Enterprise&apos;</span>
               <span>{`)`}</span>
               {'\n'}
               {'  '}
-              <span className="opacity-80">.withSecurity()</span>
+              <span className="text-slate-600">.withSecurity()</span>
               {'\n'}
               {'  '}
-              <span className="opacity-80">.withScale()</span>
+              <span className="text-slate-600">.withScale()</span>
               {'\n'}
               {'  '}
-              <span className="opacity-80">.deploy()</span>
-              <span className="opacity-60">{` // malaysia-ready`}</span>
+              <span className="text-slate-600">.deploy()</span>
+              <span className="text-slate-500">{` // malaysia-ready`}</span>
             </code>
           </pre>
         </motion.div>

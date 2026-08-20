@@ -1,19 +1,24 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-accent: #66fcf1;
-  --color-bg: #0b0c10;
+  --color-accent: #0f172a;
+  --color-bg: #ffffff;
   --font-mono: var(--font-mono);
 }
 
 :root {
-  --bg: #0b0c10;
-  --fg: #c5c6c7;
+  --bg: #ffffff;
+  --fg: #0f172a;
+  --muted: #64748b;
+  --border: #e2e8f0;
+  --card: #f8fafc;
+  --accent: #0f172a;
+  --accent-hover: #1e293b;
 }
 
 [data-theme='light'] {
-  --bg: #fff;
-  --fg: #212529;
+  --bg: #ffffff;
+  --fg: #0f172a;
 }
 
 html {

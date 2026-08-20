@@ -14,6 +14,14 @@ routes = [
   { pattern = "www.finchtech.my/*", zone_name = "finchtech.my" }
 ]
 
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+[[services]]
+binding = "WORKER_SELF_REFERENCE"
+service = "finchtech-my-frontend"
+
 [vars]
 ENVIRONMENT = "production"
 

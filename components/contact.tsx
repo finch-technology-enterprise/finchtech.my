@@ -170,39 +170,39 @@ export default function Contact() {
   return (
     <section id="contact" aria-label="Contact" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">Contact</h2>
-      <p className="mt-2 text-sm leading-relaxed opacity-70">
+      <p className="mt-2 text-sm leading-relaxed text-slate-600">
         Tell us about your project. We usually respond within one business day.
       </p>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.2fr]">
         {/* Left column — keep index.blade.php:430 copy targets */}
-        <div className="space-y-6 rounded-xl border border-white/10 bg-white/[0.03] p-6">
+        <div className="space-y-6 rounded-xl border border-slate-200 bg-slate-50 p-6">
           <div>
             <h3 className="text-sm font-semibold">Get in touch</h3>
-            <p className="mt-1 text-sm opacity-70">Prefer email or WhatsApp? Reach us directly — no form needed.</p>
+            <p className="mt-1 text-sm text-slate-600">Prefer email or WhatsApp? Reach us directly — no form needed.</p>
           </div>
           <div className="space-y-3 text-sm">
             <div>
-              <div className="text-xs font-medium uppercase tracking-wide opacity-60">Email</div>
+              <div className="text-xs font-medium uppercase tracking-wide text-slate-500">Email</div>
               <a
                 href="mailto:support@finchtech.my"
-                className="font-medium text-[var(--accent,#66fcf1)] hover:underline"
+                className="font-medium text-slate-900 hover:underline"
               >
                 support@finchtech.my
               </a>
             </div>
             <div>
-              <div className="text-xs font-medium uppercase tracking-wide opacity-60">WhatsApp</div>
+              <div className="text-xs font-medium uppercase tracking-wide text-slate-500">WhatsApp</div>
               <a
                 href="https://wa.me/60164525797"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-[var(--accent,#66fcf1)] hover:underline"
+                className="font-medium text-slate-900 hover:underline"
               >
                 wa.me/60164525797
               </a>
             </div>
-            <div className="pt-2 text-xs leading-relaxed opacity-60">
+            <div className="pt-2 text-xs leading-relaxed text-slate-500">
               Operations Center: 5B, Jalan BPU 5, Bandar Puchong Utama, 47100 Puchong, Selangor.
             </div>
           </div>
@@ -212,7 +212,7 @@ export default function Contact() {
         <form
           onSubmit={onSubmit}
           noValidate
-          className="space-y-4 rounded-xl border border-white/10 bg-white/[0.03] p-6"
+          className="space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
         >
           {/* Honeypot — hidden from users, bots fill it */}
           <div className="hidden" aria-hidden="true">

@@ -14,14 +14,21 @@ describe('Nav', () => {
     expect(screen.getByRole('link', { name: /Products/ })).toBeInTheDocument();
   });
 
-  it('renders all anchor links and Client Portal', () => {
+  it('renders all anchor links and has no Client Portal', () => {
     render(<Nav />);
     expect(screen.getByRole('link', { name: /Expertise/ })).toHaveAttribute('href', '#expertise');
     expect(screen.getByRole('link', { name: /About/ })).toHaveAttribute('href', '#about');
     expect(screen.getByRole('link', { name: /Contact/ })).toHaveAttribute('href', '#contact');
-    const portal = screen.getByRole('link', { name: /Client Portal/ });
-    expect(portal).toHaveAttribute('href', 'https://dash.finchtech.my');
-    expect(portal).toHaveAttribute('target', '_blank');
+    expect(screen.queryByRole('link', { name: /Client Portal/i })).not.toBeInTheDocument();
+    expect(document.documentElement.innerHTML).not.toContain('dash.finchtech.my');
+  });
+
+  it('has light header classes', () => {
+    const { container } = render(<Nav />);
+    const header = container.querySelector('header');
+    expect(header).toBeInTheDocument();
+    expect(header?.className).toContain('bg-[rgba(255,255,255,0.85)]');
+    expect(header?.className).toContain('border-slate-200');
   });
 
   it('renders theme toggle', () => {
@@ -86,9 +93,24 @@ describe('cn', () => {
 describe('Landing composition', () => {
   it('renders hero CTA and both product cards', () => {
     render(<Page />);
-    expect(screen.getByRole('heading', { name: /Software for Malaysian/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Two products\. One partner\./i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Explore Products/ })).toBeInTheDocument();
-    expect(screen.getByText(/NexMenu/)).toBeInTheDocument();
-    expect(screen.getByText(/GeraiKu/)).toBeInTheDocument();
+    expect(screen.getAllByText(/NexMenu/).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/GeraiKu/).length).toBeGreaterThanOrEqual(1);
+  });
+});
+
+describe('Light IA', () => {
+  it('nav has no Client Portal link', () => {
+    render(<Nav />);
+    expect(screen.queryByRole('link', { name: /Client Portal/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Products' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Contact' })).toBeInTheDocument();
+  });
+  it('landing has hero + products + contact on light paper', () => {
+    render(<Page />);
+    expect(screen.getByRole('heading', { name: /Two products\. One partner\./i })).toBeInTheDocument();
+    expect(screen.getAllByText(/NexMenu/).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/GeraiKu/).length).toBeGreaterThanOrEqual(1);
   });
 });
