@@ -25,7 +25,9 @@ export default function About() {
         }
       >
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">Enterprise</p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">About</h2>
+        <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
+          Built in Puchong. Shipped across Malaysia.
+        </h2>
       </motion.div>
 
       <div className="mt-6 grid gap-8 lg:grid-cols-2">
