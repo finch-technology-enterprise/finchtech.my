@@ -19,7 +19,7 @@ export default function PrivacyPage() {
         for privacy enquiries.
       </p>
 
-      <div className="prose prose-invert mt-8 max-w-none space-y-8 text-sm leading-relaxed opacity-90 prose-headings:tracking-tight prose-a:text-[var(--accent,#66fcf1)] prose-a:no-underline hover:prose-a:underline">
+      <div className="prose mt-8 max-w-none space-y-8 text-sm leading-relaxed text-slate-600 prose-headings:text-slate-900 prose-headings:tracking-tight prose-a:text-slate-900 prose-a:underline-offset-2 hover:prose-a:underline">
         <section>
           <h2 className="text-xl font-semibold">What we collect</h2>
           <p className="mt-2">
