@@ -1,8 +1,17 @@
+import Hero from '@/components/hero';
+import Products from '@/components/products';
+import Expertise from '@/components/expertise';
+import About from '@/components/about';
+import Contact from '@/components/contact';
+
 export default function Page() {
   return (
     <main>
-      <h1>Finch Technology Enterprise</h1>
-      <p>Software for Malaysian Businesses</p>
+      <Hero />
+      <Products />
+      <Expertise />
+      <About />
+      <Contact />
     </main>
   );
 }

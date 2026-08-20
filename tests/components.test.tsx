@@ -5,6 +5,7 @@ import Footer from '@/components/footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import Page from '@/app/page';
 
 describe('Nav', () => {
   it('renders brand and links', () => {
@@ -79,5 +80,15 @@ describe('cn', () => {
   it('merges classes', () => {
     expect(cn('px-2', 'px-4')).toBe('px-4');
     expect(cn('text-sm', { 'font-bold': true })).toContain('font-bold');
+  });
+});
+
+describe('Landing composition', () => {
+  it('renders hero CTA and both product cards', () => {
+    render(<Page />);
+    expect(screen.getByRole('heading', { name: /Software for Malaysian/i })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /Explore Products/ })).toBeInTheDocument();
+    expect(screen.getByText(/NexMenu/)).toBeInTheDocument();
+    expect(screen.getByText(/GeraiKu/)).toBeInTheDocument();
   });
 });
