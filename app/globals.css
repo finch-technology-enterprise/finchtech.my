@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-accent: #66fcf1;
+  --color-bg: #0b0c10;
+  --font-mono: var(--font-mono);
+}
+
+:root {
+  --bg: #0b0c10;
+  --fg: #c5c6c7;
+}
+
+[data-theme='light'] {
+  --bg: #fff;
+  --fg: #212529;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+}
