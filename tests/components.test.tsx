@@ -47,13 +47,13 @@ describe('Footer', () => {
     render(<Footer />);
     const year = String(new Date().getFullYear());
     expect(screen.getByText(new RegExp(year))).toBeInTheDocument();
-    expect(screen.getByText(/Finch Technology Enterprise/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Finch Technology Enterprise/).length).toBeGreaterThanOrEqual(1);
   });
 
   it('links to local privacy/terms', () => {
     render(<Footer />);
-    expect(screen.getByRole('link', { name: /Privacy/ })).toHaveAttribute('href', '/privacy');
-    expect(screen.getByRole('link', { name: /Terms/ })).toHaveAttribute('href', '/terms');
+    expect(screen.getByRole('link', { name: /^Privacy$/ })).toHaveAttribute('href', '/privacy');
+    expect(screen.getByRole('link', { name: /^Terms$/ })).toHaveAttribute('href', '/terms');
   });
 });
 

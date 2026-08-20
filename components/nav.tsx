@@ -170,6 +170,12 @@ export default function Nav() {
         </ul>
 
         <div className="flex items-center gap-2">
+          <Link
+            href="#contact"
+            className="hidden md:inline-flex h-9 items-center rounded-full bg-[var(--sky,#0ea5e9)] px-5 text-sm font-medium text-white shadow-sm hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+          >
+            Start a project
+          </Link>
           <ThemeToggle />
           <button
             type="button"
