@@ -1,3 +1,9 @@
+# finchtech.my — Cloudflare Worker (Next.js via @opennextjs/cloudflare).
+# Routes finchtech.my/* + www.finchtech.my/* are bound via the Cloudflare
+# zone Workers Routes UI (not [[routes]] in this file). Keep that invariant
+# — or, if the team migrates routes into wrangler.toml, add [[routes]] and
+# document the switch in README.md "Deploy → Routes" so only one source of
+# truth exists. See spec §2.2 and plan task 3.
 name = "finchtech-my-frontend"
 main = ".open-next/worker.js"
 compatibility_date = "2026-08-20"

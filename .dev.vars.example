@@ -1,0 +1,19 @@
+# .dev.vars — local secrets for `wrangler dev` and `next dev` + Workers runtime.
+# This is the file Wrangler actually reads locally. It is gitignored.
+# Usage:  cp .env.example .dev.vars   # or: cp .dev.vars.example .dev.vars
+# then edit the values below with real secrets for local testing.
+#
+# Remote Workers secrets are set via `npx wrangler secret put <NAME>` (or the
+# Cloudflare dashboard) — see README.md "Secrets & env" and the spec
+# docs/superpowers/specs/2026-08-20-finchtech-my-landing-design.md §4.4.
+# Keep this file out of git (already in .gitignore).
+
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=0x4AAAAAA...replace_with_real_site_key
+TURNSTILE_SECRET_KEY=0x4AAAAAA...replace_with_real_secret
+TELEGRAM_BOT_TOKEN=1234567890:AAH...replace_with_real_token
+TELEGRAM_CHAT_ID=-100...replace
+BREVO_API_KEY=xkeysib-...replace
+# SENDER_API_KEY=...replace   # only if using Sender.net instead of Brevo
+CONTACT_FROM_EMAIL=noreply@finchtech.my
+CONTACT_TO_EMAIL=support@finchtech.my
+ENVIRONMENT=production
