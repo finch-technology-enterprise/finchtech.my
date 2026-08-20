@@ -24,11 +24,6 @@ export default function Footer() {
                   GeraiKu
                 </a>
               </li>
-              <li>
-                <a href="https://api.geraiku.my" className="font-mono text-xs hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-500">
-                  api.geraiku.my
-                </a>
-              </li>
             </ul>
           </div>
           <div>

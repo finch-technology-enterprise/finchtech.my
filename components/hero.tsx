@@ -146,9 +146,6 @@ export default function Hero() {
                   <span className="inline-flex rounded-full bg-white px-2.5 py-1 font-mono text-[11px] tracking-wide text-slate-900">
                     geraiku.my
                   </span>
-                  <span className="inline-flex rounded-full bg-white/10 px-2.5 py-1 font-mono text-[11px] tracking-wide text-white/80">
-                    api.geraiku.my
-                  </span>
                 </div>
               </div>
             </div>

@@ -181,9 +181,6 @@ export default function Products() {
                   *.geraiku.my
                 </span>
                 <span className="rounded-full bg-slate-50 px-2.5 py-1 font-mono text-[11px] text-slate-700">
-                  api.geraiku.my
-                </span>
-                <span className="rounded-full bg-slate-50 px-2.5 py-1 font-mono text-[11px] text-slate-700">
                   Orders &amp; catalog
                 </span>
                 <span className="rounded-full bg-slate-50 px-2.5 py-1 font-mono text-[11px] text-slate-700">
@@ -191,8 +188,7 @@ export default function Products() {
                 </span>
               </div>
               <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-relaxed text-slate-600">
-                <li>Stores at *.geraiku.my — instant storefronts</li>
-                <li>API at api.geraiku.my</li>
+                <li>Instant storefronts at *.geraiku.my</li>
                 <li>Orders, catalog &amp; store management</li>
                 <li>Subscriptions &amp; tenancy built-in</li>
               </ul>
