@@ -1,0 +1,15 @@
+#!/bin/sh
+# Enforce the single allowed author identity for every commit.
+ident="$(git var GIT_AUTHOR_IDENT 2>/dev/null)"
+case "$ident" in
+  "Finch Technology <admin@finchtech.my>"*) ;;
+  *)
+    echo "refusing to commit: author must be 'Finch Technology <admin@finchtech.my>'" >&2
+    echo "got: $ident" >&2
+    echo "fix with: git config user.name 'Finch Technology' && git config user.email 'admin@finchtech.my'" >&2
+    exit 1
+    ;;
+esac
+
+npm run typecheck
+npx eslint . --max-warnings=0 2>/dev/null || true

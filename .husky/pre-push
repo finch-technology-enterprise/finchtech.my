@@ -1,0 +1,80 @@
+#!/bin/sh
+set -eu
+
+ALLOWED_AUTHOR="Finch Technology <admin@finchtech.my>"
+DEPENDABOT_AUTHOR="dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>"
+branch="$(git symbolic-ref --short HEAD 2>/dev/null || true)"
+zero_sha="0000000000000000000000000000000000000000"
+
+reject() {
+  echo "refusing to push: $*" >&2
+  exit 1
+}
+
+# Git supplies one line per ref update on stdin:
+#   <local ref> <local sha> <remote ref> <remote sha>
+# Validate the destination instead of trusting the current checkout branch;
+# this closes the feature-to-production refspec bypass.
+while IFS=' ' read -r local_ref local_sha remote_ref remote_sha; do
+  case "$remote_ref" in
+    refs/heads/production|refs/heads/main)
+      [ "$remote_ref" = "refs/heads/production" ] || reject "legacy main is not a valid deployment target"
+      [ "$branch" = "production" ] || reject "destination $remote_ref may only be pushed from the production checkout"
+      [ "$local_ref" = "refs/heads/production" ] || reject "destination $remote_ref requires the local production ref"
+      [ "$remote_sha" != "$zero_sha" ] || reject "production cannot be created without an existing base"
+      [ "$local_sha" != "$zero_sha" ] || reject "production cannot be deleted"
+
+      parents="$(git rev-list --parents -n 1 "$local_sha")"
+      set -- $parents
+      [ "$#" -eq 3 ] || reject "production may only receive a local merge commit"
+      [ "$2" = "$remote_sha" ] || reject "local merge commit must use the remote production tip as its first parent"
+
+      merge_author="$(git show -s --format='%an <%ae>' "$local_sha")"
+      merge_committer="$(git show -s --format='%cn <%ce>' "$local_sha")"
+      [ "$merge_author" = "$ALLOWED_AUTHOR" ] || reject "merge commit must be authored by '$ALLOWED_AUTHOR'"
+      [ "$merge_committer" = "$ALLOWED_AUTHOR" ] || reject "merge commit must be committed by '$ALLOWED_AUTHOR'"
+
+      authors="$(git log --format='%an <%ae>' "$remote_sha..$local_sha" | grep -F -v -x "$DEPENDABOT_AUTHOR" | sort -u || true)"
+      [ "$authors" = "$ALLOWED_AUTHOR" ] || reject "all commits landing on production must be authored by '$ALLOWED_AUTHOR'"
+      if git log --format=%B "$remote_sha..$local_sha" | grep -qi '^co-authored-by:'; then
+        reject "commits landing on production may not contain co-author trailers"
+      fi
+      ;;
+  esac
+done
+
+# Non-production pushes must follow feature/* or hotfix/* naming. Dependabot
+# branches are permitted because their exact bot identity is audited below.
+case "$branch" in
+  production)
+    ;;
+  feature/*|hotfix/*|dependabot/*)
+    ;;
+  *)
+    echo "refusing to push: branch '$branch' must be feature/<desc> or hotfix/<desc>" >&2
+    exit 1
+    ;;
+esac
+
+# Author audit: every commit being pushed must be authored by the single
+# allowed identity (dependabot[bot] commits are the only exemption), and no
+# commit may carry a co-author trailer. The range is everything not yet on
+# origin/production.
+if git rev-parse --verify -q origin/production >/dev/null 2>&1; then
+  authors="$(git log --format='%an <%ae>' origin/production..HEAD 2>/dev/null | grep -F -v -x "$DEPENDABOT_AUTHOR" | sort -u || true)"
+  if [ -n "$authors" ] && [ "$authors" != "Finch Technology <admin@finchtech.my>" ]; then
+    echo "refusing to push: commits must be authored by 'Finch Technology <admin@finchtech.my>'" >&2
+    echo "found:" >&2
+    echo "$authors" | sed 's/^/  /' >&2
+    echo "rewrite with: npm run enforce:author  (then push again)" >&2
+    exit 1
+  fi
+
+  if git log --format=%B origin/production..HEAD 2>/dev/null | grep -qi '^co-authored-by:'; then
+    echo "refusing to push: commits contain co-author trailers — single author only (Finch Technology <admin@finchtech.my>)" >&2
+    echo "rewrite with: npm run enforce:author  (then push again)" >&2
+    exit 1
+  fi
+fi
+
+exit 0

@@ -1,0 +1,8 @@
+#!/bin/sh
+npx --no-install commitlint --edit "$1"
+
+# Single author only — no co-author trailers on any commit.
+if grep -qi '^co-authored-by:' "$1"; then
+  echo "refusing to commit: co-author trailers are not allowed — single author: Finch Technology <admin@finchtech.my>" >&2
+  exit 1
+fi
