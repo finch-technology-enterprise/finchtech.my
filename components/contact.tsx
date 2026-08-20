@@ -173,12 +173,10 @@ export default function Contact() {
   return (
     <section id="contact" aria-label="Contact" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <motion.div
-        initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+        initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 6 }}
         whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
-        transition={
-          prefersReducedMotion ? { duration: 0.16 } : { type: 'spring', damping: 1, stiffness: 280, mass: 0.32 }
-        }
+        transition={prefersReducedMotion ? { duration: 0.16 } : { duration: 0.22, ease: 'easeOut' as const }}
       >
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">Get in touch</p>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Let&apos;s build your workflow</h2>
@@ -190,13 +188,13 @@ export default function Contact() {
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_1.2fr]">
         <motion.div
           className="space-y-6 rounded-2xl border border-sky-100 bg-[#e0f2fe]/60 p-6"
-          initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
+          initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 6 }}
           whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={
             prefersReducedMotion
               ? { duration: 0.16, delay: 0.04 }
-              : { type: 'spring', damping: 1, stiffness: 280, mass: 0.34, delay: 0.06 }
+              : { duration: 0.22, ease: 'easeOut' as const, delay: 0.06 }
           }
         >
           <div>
@@ -237,13 +235,13 @@ export default function Contact() {
           onSubmit={onSubmit}
           noValidate
           className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-          initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
+          initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 6 }}
           whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-60px' }}
           transition={
             prefersReducedMotion
               ? { duration: 0.16, delay: 0.08 }
-              : { type: 'spring', damping: 1, stiffness: 280, mass: 0.34, delay: 0.1 }
+              : { duration: 0.22, ease: 'easeOut' as const, delay: 0.1 }
           }
         >
           {/* Honeypot — hidden from users, bots fill it */}
@@ -360,9 +358,9 @@ export default function Contact() {
             <motion.p
               className="text-center text-sm font-medium text-emerald-600"
               role="status"
-              initial={{ opacity: 0, y: 6 }}
+              initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ type: 'spring', damping: 1, stiffness: 300, mass: 0.3 }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
             >
               Your message has been sent successfully. We will get back to you soon!
             </motion.p>

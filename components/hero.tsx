@@ -10,7 +10,7 @@ export default function Hero() {
   const reveal = prefersReducedMotion
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.16 } }
     : {
-        initial: { opacity: 0, y: 18 },
+        initial: { opacity: 0, y: 8 },
         animate: { opacity: 1, y: 0 },
         transition: { type: 'spring' as const, damping: 1, stiffness: 280, mass: 0.32 },
       };
@@ -18,14 +18,14 @@ export default function Hero() {
   const terminalReveal = prefersReducedMotion
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.16, delay: 0.06 } }
     : {
-        initial: { opacity: 0, y: 20, scale: 0.98, filter: 'blur(6px)' },
-        animate: { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' },
+        initial: { opacity: 0, y: 10 },
+        animate: { opacity: 1, y: 0 },
         transition: {
           type: 'spring' as const,
           damping: 1,
           stiffness: 280,
           mass: 0.32,
-          delay: 0.14,
+          delay: 0.1,
         },
       };
 

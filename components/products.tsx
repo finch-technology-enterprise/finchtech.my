@@ -11,8 +11,8 @@ export default function Products() {
     prefersReducedMotion
       ? { initial: { opacity: 0 }, whileInView: { opacity: 1 }, transition: { duration: 0.18, delay } }
       : {
-          initial: { opacity: 0, y: 16, scale: 0.99 },
-          whileInView: { opacity: 1, y: 0, scale: 1 },
+          initial: { opacity: 0, y: 8 },
+          whileInView: { opacity: 1, y: 0 },
           viewport: { once: true, margin: '-60px' as const },
           transition: { type: 'spring' as const, damping: 1, stiffness: 260, mass: 0.38, delay },
         };
@@ -20,12 +20,10 @@ export default function Products() {
   return (
     <section id="products" aria-label="Products" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <motion.div
-        initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+        initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 6 }}
         whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-80px' }}
-        transition={
-          prefersReducedMotion ? { duration: 0.16 } : { type: 'spring', damping: 1, stiffness: 280, mass: 0.32 }
-        }
+        transition={prefersReducedMotion ? { duration: 0.16 } : { duration: 0.22, ease: 'easeOut' as const }}
       >
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">House brands</p>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">Products</h2>

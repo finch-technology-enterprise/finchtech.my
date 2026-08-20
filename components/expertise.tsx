@@ -29,13 +29,11 @@ export default function Expertise() {
   return (
     <section id="expertise" aria-label="Expertise" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <motion.div
-        initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+        initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 6 }}
         whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
         transition={
-          prefersReducedMotion
-            ? { duration: 0.16 }
-            : { type: 'spring', damping: 1, stiffness: 280, mass: 0.32 }
+          prefersReducedMotion ? { duration: 0.16 } : { duration: 0.22, ease: 'easeOut' }
         }
       >
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">Capabilities</p>
@@ -46,13 +44,13 @@ export default function Expertise() {
         {CARDS.map(({ icon: Icon, title, desc, tag }, i) => (
           <motion.div
             key={title}
-            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 6 }}
             whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={
               prefersReducedMotion
                 ? { duration: 0.16, delay: i * 0.04 }
-                : { type: 'spring', damping: 1, stiffness: 280, mass: 0.32, delay: i * 0.06 }
+                : { duration: 0.22, ease: 'easeOut', delay: i * 0.04 }
             }
             className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm transition will-change-transform hover:-translate-y-0.5 hover:shadow-md"
           >
