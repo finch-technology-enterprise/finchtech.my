@@ -1,26 +1,22 @@
 'use client';
 
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 
 export default function About() {
-  const prefersReducedMotion = useReducedMotion();
-  const reveal = (delay: number) =>
-    prefersReducedMotion
-      ? { initial: { opacity: 0 }, whileInView: { opacity: 1 }, transition: { duration: 0.16, delay } }
-      : {
-          initial: { opacity: 0, y: 6 },
-          whileInView: { opacity: 1, y: 0 },
-          viewport: { once: true, margin: '-60px' as const },
-          transition: { duration: 0.22, ease: 'easeOut' as const, delay },
-        };
+  const reveal = (delay: number) => ({
+    initial: { opacity: 0 },
+    whileInView: { opacity: 1 },
+    viewport: { once: true, margin: '-60px' as const },
+    transition: { duration: 0.3, ease: 'easeOut' as const, delay },
+  });
 
   return (
     <section id="about" aria-label="About" className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
       <motion.div
-        initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 6 }}
-        whileInView={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
-        transition={prefersReducedMotion ? { duration: 0.16 } : { duration: 0.22, ease: 'easeOut' as const }}
+        transition={{ duration: 0.3, ease: 'easeOut' as const }}
       >
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-slate-500">Enterprise</p>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">

@@ -10,23 +10,17 @@ export default function Hero() {
   const reveal = prefersReducedMotion
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.16 } }
     : {
-        initial: { opacity: 0, y: 8 },
-        animate: { opacity: 1, y: 0 },
-        transition: { type: 'spring' as const, damping: 1, stiffness: 280, mass: 0.32 },
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        transition: { duration: 0.4, ease: 'easeOut' as const },
       };
 
   const terminalReveal = prefersReducedMotion
     ? { initial: { opacity: 0 }, animate: { opacity: 1 }, transition: { duration: 0.16, delay: 0.06 } }
     : {
-        initial: { opacity: 0, y: 10 },
-        animate: { opacity: 1, y: 0 },
-        transition: {
-          type: 'spring' as const,
-          damping: 1,
-          stiffness: 280,
-          mass: 0.32,
-          delay: 0.1,
-        },
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        transition: { duration: 0.4, ease: 'easeOut' as const, delay: 0.1 },
       };
 
   return (
@@ -73,7 +67,7 @@ export default function Hero() {
               transition={
                 prefersReducedMotion
                   ? { duration: 0.16, delay: 0.04 }
-                  : { type: 'spring', damping: 1, stiffness: 280, mass: 0.32, delay: 0.06 }
+                  : { duration: 0.4, ease: 'easeOut' as const, delay: 0.06 }
               }
             >
               NexMenu &amp; GeraiKu in production — we tailor, host and integrate payments, printers,
@@ -87,7 +81,7 @@ export default function Hero() {
               transition={
                 prefersReducedMotion
                   ? { duration: 0.16, delay: 0.08 }
-                  : { type: 'spring', damping: 1, stiffness: 280, mass: 0.32, delay: 0.1 }
+                  : { duration: 0.4, ease: 'easeOut' as const, delay: 0.1 }
               }
             >
               <Link
@@ -111,8 +105,7 @@ export default function Hero() {
           </div>
 
           <motion.div
-            className="will-change-transform relative"
-            style={{ willChange: 'transform, opacity' as const }}
+            className="relative"
             initial={terminalReveal.initial}
             animate={terminalReveal.animate}
             transition={terminalReveal.transition}
