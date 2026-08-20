@@ -1,25 +1,33 @@
 @import 'tailwindcss';
 
-@theme {
-  --color-accent: #0f172a;
-  --color-bg: #ffffff;
-  --font-mono: var(--font-mono);
-}
-
 :root {
   --bg: #ffffff;
   --fg: #0f172a;
+  --ink: #0f172a;
+  --ink-2: #1e293b;
+  --sky: #0ea5e9;
+  --sky-soft: #e0f2fe;
+  --amber: #f59e0b;
   --muted: #64748b;
   --border: #e2e8f0;
   --card: #f8fafc;
   --accent: #0f172a;
   --accent-hover: #1e293b;
+  --surface: #ffffff;
   --nav-blur: 20px;
-  --surface-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 4px 16px rgba(15, 23, 42, 0.04);
-  --surface-shadow-lift: 0 8px 24px rgba(15, 23, 42, 0.08), 0 2px 8px rgba(15, 23, 42, 0.06);
+  --hero-mesh: radial-gradient(800px at 20% -10%, rgba(14,165,233,0.18), transparent 60%), radial-gradient(600px at 90% 0%, rgba(245,158,11,0.10), transparent 50%);
+  --surface-shadow: 0 1px 3px rgba(15,23,42,0.06), 0 12px 32px rgba(15,23,42,0.08);
+  --surface-shadow-lift: 0 8px 24px rgba(15,23,42,0.10), 0 2px 8px rgba(15,23,42,0.06);
   --ring: 15 23 42;
   --ease-spring: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+@theme {
+  --color-accent: #0f172a;
+  --color-bg: #ffffff;
+  --color-ink: var(--ink);
+  --color-sky: var(--sky);
+  --font-mono: var(--font-mono);
 }
 
 [data-theme='light'] {
