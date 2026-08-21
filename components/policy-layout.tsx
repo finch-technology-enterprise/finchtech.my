@@ -37,10 +37,7 @@ export function PolicyLayout({
           nexmenu.my/terms
         </a>
       </div>
-      <nav
-        aria-label="On this page"
-        className="sticky top-[64px] z-10 mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4"
-      >
+      <nav aria-label="On this page" className="mt-6 rounded-xl border border-slate-200 bg-slate-50 p-4">
         <p className="text-xs font-semibold uppercase tracking-widest text-slate-500">On this page</p>
         <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">
           {toc.map((s) => (
