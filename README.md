@@ -10,7 +10,7 @@ Spec: `docs/superpowers/specs/2026-08-20-finchtech-my-landing-design.md` · Plan
 
 ## Requirements
 
-- **Node 22+** (`node -v`), **npm 10+**
+- **Node 26+** (`node -v`), **npm 11+**
 - Git author must be `Finch Technology <admin@finchtech.my>` (`git config user.name` / `user.email`) — enforced by Husky `pre-commit` and `pre-push`
 - Branches: `feature/* | hotfix/* | dependabot/*` → `production` via `npm run merge:local` (see `docs/git-workflow.md` / `.github/pull_request_template.md`)
 
