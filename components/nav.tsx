@@ -170,6 +170,12 @@ export default function Nav() {
         </ul>
 
         <div className="flex items-center gap-2">
+          <Link
+            href="#contact"
+            className="hidden md:inline-flex h-9 items-center rounded-full bg-[var(--sky,#0ea5e9)] px-5 text-sm font-medium text-white shadow-sm hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+          >
+            Start a project
+          </Link>
           <ThemeToggle />
           <button
             type="button"
@@ -202,35 +208,18 @@ export default function Nav() {
               aria-modal="true"
               aria-label="Navigation menu"
               className="fixed inset-x-0 top-14 z-50 border-b border-slate-200 bg-[rgba(255,255,255,0.97)] p-4 shadow-[0_8px_24px_rgba(15,23,42,0.08)] backdrop-blur-[16px] md:hidden"
-              initial={
-                prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.98, filter: 'blur(4px)' }
-              }
-              animate={
-                prefersReducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1, filter: 'blur(0px)' }
-              }
-              exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: -8, scale: 0.98, filter: 'blur(4px)' }}
-              transition={
-                prefersReducedMotion
-                  ? { duration: 0.14 }
-                  : {
-                      type: 'spring',
-                      damping: 1,
-                      stiffness: 300,
-                      mass: 0.32,
-                    }
-              }
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18, ease: 'easeOut' as const }}
             >
               <ul className="flex flex-col gap-1" role="list">
                 {NAV_LINKS.map((l, i) => (
                   <motion.li
                     key={l.href}
-                    initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: -6 }}
-                    animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, x: 0 }}
-                    transition={
-                      prefersReducedMotion
-                        ? { duration: 0.12, delay: i * 0.02 }
-                        : { type: 'spring', damping: 1, stiffness: 260, delay: i * 0.03 }
-                    }
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.14, delay: i * 0.02 }}
                   >
                     <Link
                       href={l.href}

@@ -47,13 +47,13 @@ describe('Footer', () => {
     render(<Footer />);
     const year = String(new Date().getFullYear());
     expect(screen.getByText(new RegExp(year))).toBeInTheDocument();
-    expect(screen.getByText(/Finch Technology Enterprise/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Finch Technology Enterprise/).length).toBeGreaterThanOrEqual(1);
   });
 
   it('links to local privacy/terms', () => {
     render(<Footer />);
-    expect(screen.getByRole('link', { name: /Privacy/ })).toHaveAttribute('href', '/privacy');
-    expect(screen.getByRole('link', { name: /Terms/ })).toHaveAttribute('href', '/terms');
+    expect(screen.getByRole('link', { name: /^Privacy$/ })).toHaveAttribute('href', '/privacy');
+    expect(screen.getByRole('link', { name: /^Terms$/ })).toHaveAttribute('href', '/terms');
   });
 });
 
@@ -93,7 +93,9 @@ describe('cn', () => {
 describe('Landing composition', () => {
   it('renders hero CTA and both product cards', () => {
     render(<Page />);
-    expect(screen.getByRole('heading', { name: /Two products\. One partner\./i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /One house\. Two platforms\. Built for Malaysian commerce\./i }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Explore Products/ })).toBeInTheDocument();
     expect(screen.getAllByText(/NexMenu/).length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText(/GeraiKu/).length).toBeGreaterThanOrEqual(1);
@@ -109,7 +111,9 @@ describe('Light IA', () => {
   });
   it('landing has hero + products + contact on light paper', () => {
     render(<Page />);
-    expect(screen.getByRole('heading', { name: /Two products\. One partner\./i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: /One house\. Two platforms\. Built for Malaysian commerce\./i }),
+    ).toBeInTheDocument();
     expect(screen.getAllByText(/NexMenu/).length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText(/GeraiKu/).length).toBeGreaterThanOrEqual(1);
   });

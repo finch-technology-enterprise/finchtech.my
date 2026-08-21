@@ -5,7 +5,8 @@
 - [ ] Superpowers plan/spec/design/handoff docs for this feature deleted; work recorded in `docs/CHANGELOG.md` (+ `docs/BACKLOG.md` statuses/debt table and module docs when applicable)
 
 ## Local Verification (required — run before opening this PR)
-- [ ] Deterministic suites pass: `npm run typecheck && npm run lint && npm run build && npm run test:workflow`
+- [ ] Engines: Node 26+ / npm 11+ (`node -v` / `npm -v` — `engines` in `package.json`); deps at latest (`npm outdated` shows only TS 7 held at `^6.0.3` until typescript-eslint supports it)
+- [ ] Deterministic suites pass: `npm run typecheck && npm run lint -- --max-warnings=0 && npm run build && npm run test && npx opennextjs-cloudflare build`
 - [ ] Chrome DevTools MCP walkthrough of the changed surface against localhost (`npm run dev` on `http://localhost:3000`): steps taken + outcome
 
 ## Production Verification (required — after the local merge push deploys)
