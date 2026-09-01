@@ -16,4 +16,8 @@ describe('Products Saasland', () => {
     // pills present
     expect(document.querySelectorAll('.rounded-full.bg-slate-50').length).toBeGreaterThanOrEqual(3);
   });
+  it('NexMenu card shows pricing link', () => {
+    render(<Products />);
+    expect(screen.getByRole('link', { name: /View pricing/i })).toHaveAttribute('href', '/pricing');
+  });
 });
