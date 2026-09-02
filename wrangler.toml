@@ -32,8 +32,13 @@ id = "12ae7be74225482fbe9556d2b00748b9"
 [vars]
 ENVIRONMENT = "production"
 
+# Observability must be enabled for `console.log`/`console.error` to reach
+# Workers Logs. It was previously false while [observability.logs] was true —
+# a contradiction that silently discarded every conversion event and, more
+# seriously, the UNNOTIFIED_LEAD_IN_KV alert that tells the owner a real
+# enquiry is waiting in KV with no notification channel configured.
 [observability]
-enabled = false
+enabled = true
 head_sampling_rate = 1
 
 [observability.logs]
