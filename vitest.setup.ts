@@ -1,5 +1,16 @@
 import '@testing-library/jest-dom/vitest';
 
+// jsdom does not implement sendBeacon. Without it, lib/analytics falls back to
+// fetch(), which pollutes fetch assertions in component tests. Real browsers
+// have it, so stubbing it keeps tests representative.
+if (typeof navigator !== 'undefined' && !('sendBeacon' in navigator)) {
+  Object.defineProperty(navigator, 'sendBeacon', {
+    writable: true,
+    configurable: true,
+    value: () => true,
+  });
+}
+
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: (query: string) => ({

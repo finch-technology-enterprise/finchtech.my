@@ -1,0 +1,24 @@
+# Cloudflare Workers static-asset headers.
+#
+# Assets are served directly by the Workers Assets layer, which does NOT apply
+# `headers()` from next.config.ts — that only covers Worker-rendered responses.
+# This file is the correct mechanism for asset caching.
+#
+# Workers' default for assets is `public, max-age=0, must-revalidate`, which
+# forces a revalidation round-trip for every build asset on every repeat visit.
+# Next.js content-hashes these filenames, so they are safe to cache immutably.
+# https://developers.cloudflare.com/workers/static-assets/headers/
+
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/icon.svg
+  Cache-Control: public, max-age=604800
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: SAMEORIGIN

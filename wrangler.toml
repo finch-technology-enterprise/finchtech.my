@@ -22,6 +22,13 @@ binding = "ASSETS"
 binding = "WORKER_SELF_REFERENCE"
 service = "finchtech-my-frontend"
 
+# Durable fallback sink for contact enquiries. If Telegram/email delivery is
+# unconfigured or failing, the enquiry is still persisted here rather than lost.
+# See app/api/contact/route.ts.
+[[kv_namespaces]]
+binding = "CONTACT_INBOX"
+id = "12ae7be74225482fbe9556d2b00748b9"
+
 [vars]
 ENVIRONMENT = "production"
 

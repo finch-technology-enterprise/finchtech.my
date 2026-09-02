@@ -103,37 +103,52 @@ All four plus `npx opennextjs-cloudflare build` must pass before requesting revi
 
 ## Deploy
 
-### Manual (any branch with credentials)
+> **Deployment is MANUAL. There is no CI.**
+>
+> This section previously described Cloudflare Workers Builds as the "preferred"
+> mechanism and claimed that pushing to `production` deploys automatically. That
+> was not true, and the gap caused a real incident: `production` was pushed on
+> 2026-09-02 while the last deploy was from 2026-09-01, so four newly added
+> compliance pages (`/pricing`, `/refund`, `/service-delivery`,
+> `/payment-policy`) returned 404 in production while passing every local test.
+>
+> Verified 2026-09-02 via the Cloudflare API: the Worker has **no Workers Builds
+> repository connection** and **zero build records**. Every deployment to date
+> has `source: "wrangler"` — i.e. run by hand.
+>
+> **Pushing to `production` does nothing on its own. You must run the deploy.**
+
+### Deploy + verify
 
 ```bash
-npm run build
-npx opennextjs-cloudflare build
-npx opennextjs-cloudflare deploy
-# equivalent: npx wrangler deploy --config wrangler.toml
+# 1. Verify before deploying
+npm run typecheck && npm run lint -- --max-warnings=0 && npm run test && npm run build
 
-# smoke:
-curl https://finchtech.my/api/health
-curl -X POST https://finchtech.my/api/contact \
-  -H 'Content-Type: application/json' \
-  -d '{"name":"Test","contact":"test@example.com","message":"Hello from deploy smoke — long enough.","turnstileToken":"<real-token>"}'
+# 2. Deploy
+npm run deploy          # opennextjs-cloudflare build && opennextjs-cloudflare deploy
+
+# 3. Smoke-test production — REQUIRED, and must be run every time
+npm run smoke
 ```
 
-`package.json:deploy` is `opennextjs-cloudflare build && opennextjs-cloudflare deploy`.
+`npm run smoke` (`scripts/smoke.sh`) checks every public route, the redirects,
+the API endpoints and the outbound NexMenu destinations. It exits non-zero on the
+first failure, which is what would have caught the incident above.
 
-### Workers Builds (CI — preferred)
+### If you want real CI
 
-Connect the repo to **Cloudflare Workers Builds** (dashboard → Workers & Pages → `finchtech-my-frontend` → Settings → Builds):
-
-- **Build command:** `npm ci && npm run build && npx opennextjs-cloudflare build`
-- **Deploy command:** `npx opennextjs-cloudflare deploy`
-- **Branch → env:** `production` branch → `production` environment; preview branches get preview URLs
-- **Environment variables / secrets:** set the same secrets as above in the Builds environment (or via `wrangler secret put` separately — Builds deploys read Worker secrets)
-
-On push to `production`, Workers Builds runs build + deploy and publishes to `finchtech.my` / `www.finchtech.my`.
+Connect the repo in the dashboard (Workers & Pages → `finchtech-my-frontend` →
+Settings → Builds) with build `npm ci && npm run build && npx opennextjs-cloudflare build`
+and deploy `npx opennextjs-cloudflare deploy`. **Until that connection exists,
+this README must keep saying deployment is manual.** Do not document intent as
+if it were fact.
 
 ### Routes
 
-Worker is bound to `finchtech.my/*` + `www.finchtech.my/*` via **Cloudflare zone Workers Routes UI** (not `wrangler.toml [[routes]]`) — this is the invariant from `wrangler.toml` / spec §2.2 and plan task 3. Keep it there; do not add `[[routes]]` to `wrangler.toml` unless the team decides to manage routes in code (then document the switch and keep one source of truth). See `wrangler.toml` header comment.
+Worker is bound to `finchtech.my/*` + `www.finchtech.my/*`. Note both
+`wrangler.toml [[routes]]` and the zone Workers Routes UI currently declare
+these; they agree, so behaviour is correct, but `wrangler.toml` is the source of
+truth because `opennextjs-cloudflare deploy` reconciles from it.
 
 `wrangler.toml` at root: `name = "finchtech-my-frontend"`, `main = ".open-next/worker.js"`, `compatibility_date = "2026-08-20"`, `compatibility_flags = ["nodejs_compat"]`, `account_id = "28970b96b4880e4f41cc0487104898a0"`, `workers_dev = true`, `observability.logs` enabled. No D1/R2/KV bindings at launch (YAGNI — spec §9).
 

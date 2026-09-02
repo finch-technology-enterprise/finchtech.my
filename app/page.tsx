@@ -1,17 +1,30 @@
-import Hero from '@/components/hero';
-import Products from '@/components/products';
-import Expertise from '@/components/expertise';
-import About from '@/components/about';
-import Contact from '@/components/contact';
+import type { Metadata } from 'next';
+import { Hero } from '@/components/home/hero';
+import { NexMenuSpotlight } from '@/components/home/nexmenu-spotlight';
+import { OtherProducts } from '@/components/home/other-products';
+import { WhyFinch } from '@/components/home/why-finch';
+import { CapabilitiesPreview } from '@/components/home/capabilities-preview';
+import { ClosingCta } from '@/components/home/closing-cta';
+import { jsonLd, localBusinessSchema, nexmenuSchema } from '@/lib/schema';
 
-export default function Page() {
+export const metadata: Metadata = {
+  title: 'Finch Technology — Cloud software built for Malaysian businesses',
+  description:
+    'Finch Technology builds and operates cloud software for Malaysian businesses. NexMenu handles QR ordering, point of sale and kitchen operations for cafes and restaurants. Registered in Malaysia, based in Puchong.',
+  alternates: { canonical: '/' },
+};
+
+export default function HomePage() {
   return (
-    <main id="main">
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(nexmenuSchema())} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(localBusinessSchema())} />
       <Hero />
-      <Products />
-      <Expertise />
-      <About />
-      <Contact />
-    </main>
+      <NexMenuSpotlight />
+      <WhyFinch />
+      <CapabilitiesPreview />
+      <OtherProducts />
+      <ClosingCta />
+    </>
   );
 }

@@ -1,44 +1,87 @@
 import * as React from 'react';
+import Link from 'next/link';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 
+/**
+ * The single button/CTA implementation for the site.
+ *
+ * Previously every visible CTA was a hand-rolled <Link> with bespoke classes
+ * while the Button primitive went unused. Both `Button` and `ButtonLink` share
+ * one `buttonVariants` source so a CTA looks identical whether it renders as a
+ * <button> or an <a>.
+ *
+ * Sizes are floored at 44px (`md` and up) to satisfy the WCAG 2.5.8 target-size
+ * guidance the audit found failing on every interactive element.
+ */
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-[transform,background-color,border-color,box-shadow,color] duration-200 will-change-transform active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  [
+    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full',
+    'font-semibold transition-[background-color,border-color,color,box-shadow,transform]',
+    'duration-200 ease-[var(--ease-standard)]',
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+    'focus-visible:ring-brand-600 focus-visible:ring-offset-surface',
+    'active:scale-[0.98] disabled:pointer-events-none disabled:opacity-55',
+  ].join(' '),
   {
     variants: {
       variant: {
-        default:
-          'bg-[var(--accent,#0f172a)] text-white shadow-sm hover:bg-[var(--accent-hover,#1e293b)] hover:shadow-md',
-        ghost: 'hover:bg-slate-100 hover:text-slate-900 active:bg-slate-100',
-        outline:
-          'border border-slate-200 bg-white shadow-sm hover:bg-slate-50 hover:text-slate-900 hover:border-slate-300',
+        // 6.36:1 with white text — AA at every size.
+        primary: 'bg-brand-600 text-white shadow-card hover:bg-brand-700 hover:shadow-lift',
+        secondary:
+          'border border-border-strong bg-surface text-fg shadow-card hover:border-ink-400 hover:bg-ink-50',
+        ghost: 'text-fg hover:bg-ink-100',
+        inverse: 'bg-white text-ink-900 shadow-card hover:bg-ink-100',
+        'inverse-outline': 'border border-white/30 text-white hover:border-white/60 hover:bg-white/10',
+        whatsapp: 'bg-whatsapp text-white shadow-card hover:brightness-110 hover:shadow-lift',
       },
       size: {
-        default: 'h-10 px-4 py-2',
-        sm: 'h-8 rounded-md px-3 text-xs',
-        lg: 'h-11 rounded-md px-8',
+        sm: 'h-10 px-4 text-sm',
+        md: 'h-11 px-5 text-sm',
+        lg: 'h-12 px-6 text-base',
       },
+      full: { true: 'w-full', false: '' },
     },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
-    },
+    defaultVariants: { variant: 'primary', size: 'md', full: false },
   },
 );
+
+export type ButtonVariants = VariantProps<typeof buttonVariants>;
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
+    ButtonVariants {}
+
+function Button({ className, variant, size, full, ...props }: ButtonProps) {
+  return <button className={cn(buttonVariants({ variant, size, full }), className)} {...props} />;
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild: _asChild, ...props }, ref) => {
-    return (
-      <button ref={ref} className={cn(buttonVariants({ variant, size, className }))} {...props} />
-    );
-  },
-);
-Button.displayName = 'Button';
+export interface ButtonLinkProps
+  extends Omit<React.ComponentProps<typeof Link>, 'href'>,
+    ButtonVariants {
+  href: string;
+  /** External links get target/rel automatically — a consistency bug previously. */
+  external?: boolean;
+}
 
-export { Button, buttonVariants };
+function ButtonLink({
+  className,
+  variant,
+  size,
+  full,
+  href,
+  external,
+  ...props
+}: ButtonLinkProps) {
+  const isExternal = external ?? /^https?:\/\//.test(href);
+  return (
+    <Link
+      href={href}
+      className={cn(buttonVariants({ variant, size, full }), className)}
+      {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+      {...props}
+    />
+  );
+}
+
+export { Button, ButtonLink, buttonVariants };
