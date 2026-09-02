@@ -16,14 +16,43 @@ CHECKS=0
 
 red()   { printf '\033[31m%s\033[0m\n' "$1"; }
 green() { printf '\033[32m%s\033[0m\n' "$1"; }
+yellow() { printf '\033[33m%s\033[0m\n' "$1"; }
+
+# Transient local network failures (curl exit 6/7/28 -> empty or 000 output)
+# must not be reported as production outages. A smoke test that cries wolf gets
+# ignored, which defeats its purpose. Each probe is retried before failing;
+# only a repeatable failure is real.
+RETRIES=3
+RETRY_DELAY=2
+
+# fetch_field <curl-write-out-field> <path> — retries while the result looks
+# like a connection failure rather than an HTTP answer.
+fetch_field() {
+  field="$1"; path="$2"
+  attempt=1
+  while [ "$attempt" -le "$RETRIES" ]; do
+    out="$(curl -sS -o /dev/null -w "%{$field}" --max-time 25 "${BASE}${path}" 2>/dev/null || echo '')"
+    case "$out" in
+      ''|000|000000) ;;                 # connection failure — retry
+      *) printf '%s' "$out"; return 0 ;;
+    esac
+    attempt=$((attempt + 1))
+    [ "$attempt" -le "$RETRIES" ] && sleep "$RETRY_DELAY"
+  done
+  printf '%s' "${out:-000}"
+  return 1
+}
 
 # expect_status <path> <expected-code>
 expect_status() {
   path="$1"; want="$2"
   CHECKS=$((CHECKS + 1))
-  got="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "${BASE}${path}" || echo 000)"
+  got="$(fetch_field http_code "$path")"
   if [ "$got" = "$want" ]; then
     printf '  ok    %-34s %s\n' "$path" "$got"
+  elif [ "$got" = "000" ]; then
+    yellow "  WARN  $path — unreachable after $RETRIES attempts (local network?)"
+    FAILURES=$((FAILURES + 1))
   else
     red "  FAIL  $path — expected $want, got $got"
     FAILURES=$((FAILURES + 1))
@@ -34,7 +63,7 @@ expect_status() {
 expect_redirect() {
   path="$1"; want="$2"
   CHECKS=$((CHECKS + 1))
-  got="$(curl -sS -o /dev/null -w '%{redirect_url}' --max-time 20 "${BASE}${path}" || echo '')"
+  got="$(fetch_field redirect_url "$path")"
   case "$got" in
     *"$want"*) printf '  ok    %-34s -> %s\n' "$path" "$got" ;;
     *) red "  FAIL  $path — expected redirect containing '$want', got '${got:-none}'"
@@ -42,11 +71,29 @@ expect_redirect() {
   esac
 }
 
+# fetch_body <path> — retries transient failures, prints the body.
+fetch_body() {
+  path="$1"
+  attempt=1
+  while [ "$attempt" -le "$RETRIES" ]; do
+    body="$(curl -sS --max-time 25 "${BASE}${path}" 2>/dev/null || true)"
+    [ -n "$body" ] && { printf '%s' "$body"; return 0; }
+    attempt=$((attempt + 1))
+    [ "$attempt" -le "$RETRIES" ] && sleep "$RETRY_DELAY"
+  done
+  return 1
+}
+
 # expect_body <path> <substring>
 expect_body() {
   path="$1"; want="$2"
   CHECKS=$((CHECKS + 1))
-  if curl -sS --max-time 20 "${BASE}${path}" | grep -q -- "$want"; then
+  if ! body="$(fetch_body "$path")"; then
+    yellow "  WARN  $path — unreachable after $RETRIES attempts (local network?)"
+    FAILURES=$((FAILURES + 1))
+    return
+  fi
+  if printf '%s' "$body" | grep -q -- "$want"; then
     printf '  ok    %-34s contains %s\n' "$path" "$want"
   else
     red "  FAIL  $path — body missing '$want'"
@@ -58,7 +105,14 @@ expect_body() {
 expect_absent() {
   path="$1"; bad="$2"
   CHECKS=$((CHECKS + 1))
-  if curl -sS --max-time 20 "${BASE}${path}" | grep -q -- "$bad"; then
+  # An empty body must NOT count as "absent" — that would pass vacuously when
+  # the request failed, hiding a real regression.
+  if ! body="$(fetch_body "$path")"; then
+    yellow "  WARN  $path — unreachable after $RETRIES attempts (local network?)"
+    FAILURES=$((FAILURES + 1))
+    return
+  fi
+  if printf '%s' "$body" | grep -q -- "$bad"; then
     red "  FAIL  $path — leaked '$bad' into page output"
     FAILURES=$((FAILURES + 1))
   else
@@ -109,7 +163,14 @@ expect_absent / 'opacity:0'
 echo "\nOutbound product destinations"
 for url in https://nexmenu.my/demo https://nexmenu.my/product https://nexmenu.my/auth/signup https://geraiku.my/; do
   CHECKS=$((CHECKS + 1))
-  got="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "$url" || echo 000)"
+  got=''
+  attempt=1
+  while [ "$attempt" -le "$RETRIES" ]; do
+    got="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 25 "$url" 2>/dev/null || echo 000)"
+    [ "$got" != "000" ] && break
+    attempt=$((attempt + 1))
+    [ "$attempt" -le "$RETRIES" ] && sleep "$RETRY_DELAY"
+  done
   if [ "$got" = "200" ]; then
     printf '  ok    %-42s %s\n' "$url" "$got"
   else
