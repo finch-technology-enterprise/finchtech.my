@@ -46,10 +46,11 @@ export default function PrivacyPage() {
 
       <Section id="what-we-collect" title="1. What personal data we collect">
         <p>
-          <strong>On finchtech.my — inquiry-only:</strong> when you use the contact form we collect the name,
-          contact detail (email or WhatsApp number), and message you submit, plus technical metadata such as IP
-          address and Turnstile verification token for abuse prevention. We also collect standard server logs when you
-          visit the site. We do not collect payment card or banking details on this site.
+          <strong>On finchtech.my — enquiries only:</strong> when you use the contact form we collect the name,
+          contact detail (email or WhatsApp number), enquiry topic and message you submit, plus technical metadata
+          such as your IP address and a Cloudflare Turnstile verification token used to block automated abuse. We also
+          collect standard server logs when you visit the site. We do not collect payment card or banking details on
+          this site.
         </p>
         <p>
           For data processed when you order food or create a merchant account on our product platforms (including
@@ -97,18 +98,31 @@ export default function PrivacyPage() {
 
       <Section id="storage-security" title="4. Storage and security">
         <p>
-          Personal data is stored on Cloudflare&apos;s global infrastructure. We restrict internal access to what is
-          needed to operate the site and handle enquiries, and use industry-standard measures such as encrypted
-          transport and access controls. No online service can be guaranteed completely secure, but we take reasonable
-          technical and organisational steps to protect the data we hold.
+          Personal data submitted through this site is stored on Cloudflare&apos;s global infrastructure, specifically
+          in Cloudflare Workers KV. Access is restricted to the people who operate the site and handle enquiries, and
+          data is transmitted over encrypted connections. No online service can be guaranteed completely secure, but we
+          take reasonable technical and organisational steps to protect the data we hold.
+        </p>
+        <p>
+          This site does not collect payment card details, banking credentials or identity documents. Please do not
+          send them through the contact form.
         </p>
       </Section>
 
       <Section id="retention" title="5. Retention">
         <p>
-          Contact submissions are retained only as long as needed to handle your request and meet legal or accounting
-          requirements. Delivery logs with messaging providers are subject to those providers&apos; retention policies.
-          Server logs are rotated periodically.
+          When you submit the contact form, your enquiry is stored in Cloudflare Workers KV — a key-value store on
+          Cloudflare&apos;s infrastructure — so that it is not lost if a notification channel fails. Stored enquiries
+          are <strong>automatically deleted 180 days after they are received</strong>. Each record contains the name,
+          contact detail, enquiry topic and message you submitted, plus the country your request came from.
+        </p>
+        <p>
+          We may delete an enquiry sooner once it has been handled. Delivery logs held by messaging providers are
+          subject to those providers&apos; own retention policies. Server request logs are retained for a short period
+          for security and troubleshooting, and are rotated periodically.
+        </p>
+        <p>
+          You can ask us to delete an enquiry you sent at any time using the contact details in Section 10.
         </p>
       </Section>
 
@@ -127,11 +141,22 @@ export default function PrivacyPage() {
         </p>
       </Section>
 
-      <Section id="cookies" title="7. Cookies and local storage">
+      <Section id="cookies" title="7. Cookies, analytics and local storage">
         <p>
           finchtech.my uses only essential cookies and browser storage needed to keep the site working — for example,
           to remember that a Turnstile verification passed or to support the contact form. We do not use advertising
-          cookies on this site. Disabling cookies in your browser may prevent the contact form from working correctly.
+          cookies, advertising pixels or cross-site tracking on this site. Disabling cookies in your browser may
+          prevent the contact form from working correctly.
+        </p>
+        <p>
+          <strong>Measurement.</strong> We record which buttons are used — for example when someone opens the NexMenu
+          demo, clicks through to pricing, or starts a WhatsApp message — so we can tell which parts of the site are
+          useful. These records contain only the action taken, where on the page it happened, the page path, the
+          country of the request and the referring site. They do{' '}
+          <strong>not</strong> contain your name, email address, phone number, message, or any identifier that
+          persists between visits, and they are not shared with advertising networks.
+        </p>
+        <p>
           Product platforms (including NexMenu) may use additional cookies as described in{' '}
           <a href="https://nexmenu.my/privacy" className="underline underline-offset-2">
             nexmenu.my/privacy

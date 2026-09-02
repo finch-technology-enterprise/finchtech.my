@@ -4,12 +4,11 @@ import robots from '@/app/robots';
 import {
   breadcrumbSchema,
   geraikuSchema,
-  localBusinessSchema,
   nexmenuSchema,
   organizationSchema,
   websiteSchema,
 } from '@/lib/schema';
-import { COMPANY, NEXMENU, GERAIKU } from '@/lib/company';
+import { COMPANY, NEXMENU } from '@/lib/company';
 
 /**
  * SEO surface coverage.
@@ -89,10 +88,16 @@ describe('robots', () => {
 });
 
 describe('structured data', () => {
-  it('organization schema links the product properties via sameAs', () => {
-    const schema = organizationSchema() as { sameAs: string[]; identifier: { value: string } };
-    expect(schema.sameAs).toContain(NEXMENU.origin);
-    expect(schema.sameAs).toContain(GERAIKU.origin);
+  it('organization schema links products via ownership, not sameAs', () => {
+    // sameAs asserts "same entity". The products are owned BY Finch, not
+    // alternative identities OF Finch — see tests/hardening.test.ts.
+    const schema = organizationSchema() as {
+      owns: { '@id': string }[];
+      identifier: { value: string };
+    };
+    const owned = schema.owns.map((o) => o['@id']);
+    expect(owned).toContain(`${COMPANY.siteUrl}/#nexmenu`);
+    expect(owned).toContain(`${COMPANY.siteUrl}/#geraiku`);
     expect(schema.identifier.value).toBe(COMPANY.registrationNo);
   });
 
@@ -117,7 +122,7 @@ describe('structured data', () => {
 
   it('claims no ratings, review counts or user numbers', () => {
     // Guards against schema being used to manufacture social proof.
-    for (const schema of [organizationSchema(), nexmenuSchema(), geraikuSchema(), localBusinessSchema()]) {
+    for (const schema of [organizationSchema(), nexmenuSchema(), geraikuSchema(), websiteSchema()]) {
       const serialised = JSON.stringify(schema);
       expect(serialised).not.toMatch(/aggregateRating|reviewCount|ratingValue|userInteractionCount/);
     }

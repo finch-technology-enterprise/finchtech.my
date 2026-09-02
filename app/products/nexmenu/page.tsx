@@ -178,7 +178,7 @@ export default function NexMenuPage() {
           <div>
             <SectionHeading
               eyebrow="Who it is for"
-              title="Built for the way Malaysian F&B actually runs"
+              title="Built for the way Malaysian F&B runs"
               lead="Ringgit pricing, local payment gateways, e-Invoice export, and support in the same timezone as your kitchen."
             />
             <ul className="mt-8 space-y-3" role="list">

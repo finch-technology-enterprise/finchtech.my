@@ -39,14 +39,18 @@ export const COMPANY = {
 export const ADDRESS_ONE_LINE = `${COMPANY.address.line1}, ${COMPANY.address.line2}, ${COMPANY.address.postcode} ${COMPANY.address.city}, ${COMPANY.address.state}, ${COMPANY.address.country}`;
 
 /**
- * WhatsApp deep link with a prefilled enquiry.
- * `context` lets each surface pre-frame the conversation so the team knows
- * where the lead came from without any tracking cookie.
+ * WhatsApp deep link with a prefilled opening message.
+ *
+ * Kept short and conversational — this is the first line the recipient sees and
+ * the sender can edit before sending. Long, formal openers ("I am interested in
+ * learning more about your software solutions") read as automated and get
+ * deleted before sending, which defeats the point.
+ *
+ * `context` frames the conversation so the team knows which surface the lead
+ * came from, without any tracking cookie.
  */
 export function whatsappUrl(context?: string): string {
-  const message = context
-    ? `Hi Finch Technology, I'd like to ask about ${context}.`
-    : `Hi Finch Technology, I'd like to make an enquiry.`;
+  const message = context ? `Hi Finch, I'd like to ask about ${context}.` : `Hi Finch, I have an enquiry.`;
   return `https://wa.me/${COMPANY.whatsappNumber}?text=${encodeURIComponent(message)}`;
 }
 

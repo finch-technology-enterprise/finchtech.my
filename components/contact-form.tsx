@@ -2,10 +2,22 @@
 
 import * as React from 'react';
 import Script from 'next/script';
+import { MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 import { ContactSchema, ENQUIRY_TOPICS, type EnquiryTopic } from '@/lib/contact';
 import { Button } from '@/components/ui/button';
+import { TrackedLink } from '@/components/ui/tracked-link';
+import { COMPANY, MAILTO, whatsappUrl } from '@/lib/company';
 import { trackConversion } from '@/lib/analytics';
+
+/** Frames the WhatsApp fallback around whatever the visitor selected. */
+const TOPIC_CONTEXT: Record<EnquiryTopic, string> = {
+  nexmenu: 'NexMenu',
+  support: 'product support',
+  integration: 'an integration',
+  partnership: 'a partnership',
+  general: undefined as unknown as string,
+};
 
 /**
  * Contact form.
@@ -55,6 +67,14 @@ export function ContactForm() {
   const [pending, setPending] = React.useState(false);
   const [token, setToken] = React.useState('');
   const [scriptReady, setScriptReady] = React.useState(false);
+  /**
+   * True when the anti-bot challenge cannot run at all — blocked host, failed
+   * script, or a widget that errored. The server requires a verified token
+   * whenever it holds a secret, so in this state the form genuinely cannot be
+   * submitted and we must say so and offer a route that works, rather than
+   * letting the customer retry into a permanent 400.
+   */
+  const [challengeUnavailable, setChallengeUnavailable] = React.useState(false);
 
   const widgetRef = React.useRef<HTMLDivElement>(null);
   const widgetIdRef = React.useRef<string | null>(null);
@@ -69,18 +89,36 @@ export function ContactForm() {
     if (!siteKey || !scriptReady || widgetIdRef.current) return;
     const el = widgetRef.current;
     const api = window.turnstile;
-    if (!el || !api?.render) return;
+    if (!el || !api?.render) {
+      setChallengeUnavailable(true);
+      return;
+    }
     try {
       widgetIdRef.current = api.render(el, {
         sitekey: siteKey,
-        callback: (t: string) => setToken(t),
+        callback: (t: string) => {
+          setToken(t);
+          setChallengeUnavailable(false);
+        },
         'expired-callback': () => setToken(''),
-        'error-callback': () => setToken(''),
+        'error-callback': () => {
+          setToken('');
+          setChallengeUnavailable(true);
+        },
       });
     } catch {
-      // Widget already rendered, or the challenge could not initialise. The
-      // form remains submittable; the server decides how to treat it.
+      setChallengeUnavailable(true);
     }
+  }, [siteKey, scriptReady]);
+
+  // If the challenge script never loads (blocked host, offline, blocker), stop
+  // waiting and surface the alternative channels.
+  React.useEffect(() => {
+    if (!siteKey || scriptReady) return;
+    const timer = window.setTimeout(() => {
+      if (!window.turnstile?.render) setChallengeUnavailable(true);
+    }, 8000);
+    return () => window.clearTimeout(timer);
   }, [siteKey, scriptReady]);
 
   const resetWidget = React.useCallback(() => {
@@ -125,12 +163,20 @@ export function ContactForm() {
       const json = (await res.json()) as {
         success: boolean;
         message: string;
+        challengeFailed?: boolean;
         fieldErrors?: { fieldErrors?: FieldErrors };
       };
 
       if (!res.ok || !json.success) {
         if (json.fieldErrors?.fieldErrors) setErrors(json.fieldErrors.fieldErrors);
-        toast.error(json.message || 'Something went wrong. Please try again.');
+        // A challenge rejection is not something the customer can fix by
+        // retrying — surface the persistent fallback panel instead of a toast
+        // that disappears after a few seconds.
+        if (res.status === 400 && json.challengeFailed) {
+          setChallengeUnavailable(true);
+        } else {
+          toast.error(json.message || 'Something went wrong. Please try again.');
+        }
         trackConversion('contact_submit_failure', form.topic);
         resetWidget();
         return;
@@ -269,11 +315,51 @@ export function ContactForm() {
         ) : null}
       </div>
 
-      {/* Anti-bot widget. When unavailable this area simply stays empty — it
-          never surfaces configuration details, and never blocks submission. */}
-      {siteKey ? <div ref={widgetRef} className="min-h-[65px]" /> : null}
+      {/* Anti-bot widget. Never surfaces configuration details to the visitor. */}
+      {siteKey ? <div ref={widgetRef} className={challengeUnavailable ? 'hidden' : 'min-h-[65px]'} /> : null}
 
-      <Button type="submit" size="lg" full disabled={pending}>
+      {/* Challenge cannot run — the server will reject any submission, so give
+          the customer an honest explanation and a channel that actually works
+          instead of a "please try again" they can never satisfy. */}
+      {challengeUnavailable ? (
+        <div
+          role="alert"
+          className="rounded-lg border border-border bg-surface-sunken p-5 text-sm"
+        >
+          <p className="font-semibold text-fg">This form can&apos;t be sent from your connection</p>
+          <p className="mt-2 leading-relaxed text-fg-muted">
+            Our spam check could not load — this is usually a browser extension, a company network
+            or an ad blocker. Please reach us directly instead. We reply to both.
+          </p>
+          <div className="mt-4 flex flex-col gap-2.5 sm:flex-row">
+            <TrackedLink
+              href={whatsappUrl(TOPIC_CONTEXT[form.topic])}
+              event="whatsapp_click"
+              placement="contact_form_fallback"
+              attribute={false}
+              variant="whatsapp"
+              size="md"
+            >
+              <MessageCircle className="h-4 w-4" aria-hidden />
+              WhatsApp us
+            </TrackedLink>
+            <TrackedLink
+              href={MAILTO}
+              event="email_click"
+              placement="contact_form_fallback"
+              attribute={false}
+              variant="secondary"
+              size="md"
+              target={undefined}
+              rel={undefined}
+            >
+              {COMPANY.email}
+            </TrackedLink>
+          </div>
+        </div>
+      ) : null}
+
+      <Button type="submit" size="lg" full disabled={pending || challengeUnavailable}>
         {pending ? 'Sending…' : 'Send enquiry'}
       </Button>
 

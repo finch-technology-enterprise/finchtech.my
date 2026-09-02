@@ -94,10 +94,17 @@ export async function POST(req: NextRequest) {
   if (challengeConfigured) {
     verified = await verifyTurnstile(parsed.data.turnstileToken, ip);
     if (!verified) {
+      // `challengeFailed` lets the client distinguish this from a validation
+      // error. Retrying cannot fix a blocked challenge host, so the UI shows a
+      // persistent WhatsApp/email fallback rather than a transient toast.
+      // Deliberately NOT downgraded to "accept unverified": that would let any
+      // automated client bypass bot protection by omitting the token.
       return NextResponse.json(
         {
           success: false,
-          message: 'We could not complete the anti-spam check. Please try again.',
+          challengeFailed: true,
+          message:
+            'We could not complete the spam check. Please message us on WhatsApp or email instead.',
         },
         { status: 400 },
       );
@@ -150,16 +157,29 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: false, message: FAILURE_MESSAGE }, { status: 502 });
   }
 
-  console.log(
-    JSON.stringify({
-      kind: 'contact_received',
-      topic: parsed.data.topic,
-      verified,
-      notified,
-      persisted,
-      country: req.headers.get('cf-ipcountry') ?? null,
-    }),
-  );
+  // Operational visibility. When no notification channel is configured, this is
+  // the ONLY signal that a real lead is waiting in KV — so it is logged at
+  // error level to make it surface in Workers Observability alerts rather than
+  // sitting silently in an unread store.
+  const logLine = {
+    kind: 'contact_received',
+    topic: parsed.data.topic,
+    verified,
+    notified,
+    persisted,
+    country: req.headers.get('cf-ipcountry') ?? null,
+  };
+  if (!notified) {
+    console.error(
+      JSON.stringify({
+        ...logLine,
+        alert: 'UNNOTIFIED_LEAD_IN_KV',
+        action: 'npm run leads — no Telegram/email channel is configured',
+      }),
+    );
+  } else {
+    console.log(JSON.stringify(logLine));
+  }
 
   return NextResponse.json({ success: true, message: SUCCESS_MESSAGE });
 }

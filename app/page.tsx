@@ -5,7 +5,7 @@ import { OtherProducts } from '@/components/home/other-products';
 import { WhyFinch } from '@/components/home/why-finch';
 import { CapabilitiesPreview } from '@/components/home/capabilities-preview';
 import { ClosingCta } from '@/components/home/closing-cta';
-import { jsonLd, localBusinessSchema, nexmenuSchema } from '@/lib/schema';
+import { geraikuSchema, jsonLd, nexmenuSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Finch Technology — Cloud software built for Malaysian businesses',
@@ -18,7 +18,7 @@ export default function HomePage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(nexmenuSchema())} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(localBusinessSchema())} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(geraikuSchema())} />
       <Hero />
       <NexMenuSpotlight />
       <WhyFinch />

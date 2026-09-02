@@ -23,13 +23,13 @@ const PILLARS = [
   },
   {
     icon: MapPin,
-    title: 'People you can actually reach',
-    body: 'A real address in Puchong, Selangor, and support over email or WhatsApp — not a ticket queue in another timezone.',
+    title: 'Support in your timezone',
+    body: 'A real address in Puchong, Selangor, and answers over WhatsApp or email from the people who build the software.',
   },
   {
     icon: Wrench,
-    title: 'Software already running in production',
-    body: 'NexMenu and GeraiKu are live products serving real businesses today. What you see is what is running, not a prototype.',
+    title: 'Working products, not prototypes',
+    body: 'NexMenu and GeraiKu are live services you can try today. The screenshots on this site are the software as it ships.',
   },
   {
     icon: ShieldCheck,

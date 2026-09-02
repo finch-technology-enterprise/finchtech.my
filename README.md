@@ -135,6 +135,25 @@ npm run smoke
 the API endpoints and the outbound NexMenu destinations. It exits non-zero on the
 first failure, which is what would have caught the incident above.
 
+### Reading contact enquiries
+
+```bash
+npm run leads            # print pending enquiries from KV
+npm run leads -- --keys  # list keys only
+```
+
+Every enquiry is written to the `CONTACT_INBOX` KV namespace and expires after
+180 days. **Until `TELEGRAM_*` / email secrets are set, KV is the only place a
+lead lands** — nothing notifies you. When that happens the Worker logs
+`UNNOTIFIED_LEAD_IN_KV` at error level, so it is visible in Workers
+Observability and can be alerted on.
+
+Delete an enquiry once handled:
+
+```bash
+npx wrangler kv key delete "<key>" --namespace-id 12ae7be74225482fbe9556d2b00748b9 --remote
+```
+
 ### If you want real CI
 
 Connect the repo in the dashboard (Workers & Pages → `finchtech-my-frontend` →
