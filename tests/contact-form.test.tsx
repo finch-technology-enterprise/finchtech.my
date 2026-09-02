@@ -189,6 +189,24 @@ describe('ContactForm', () => {
     expect(alert.textContent).not.toMatch(/TURNSTILE|NEXT_PUBLIC/i);
   });
 
+  /**
+   * "Challenge not completed yet" and "challenge cannot load" are different
+   * problems with different remedies. Conflating them would either send a
+   * solvable case to WhatsApp, or tell an unreachable case to keep retrying.
+   * Without a site key configured (as in this test env) neither prompt applies
+   * and the form submits normally.
+   */
+  it('submits without a challenge prompt when no site key is configured', async () => {
+    const user = userEvent.setup();
+    render(<ContactForm />);
+    await fillValid(user);
+    await user.click(screen.getByRole('button', { name: /send enquiry/i }));
+
+    await waitFor(() => expect(globalThis.fetch).toHaveBeenCalledTimes(1));
+    expect(screen.queryByText(/complete the spam check above/i)).toBeNull();
+    expect(screen.queryByText(/can't be sent from your connection/i)).toBeNull();
+  });
+
   it('does not show the fallback for an ordinary server error', async () => {
     globalThis.fetch = vi.fn(async () =>
       new Response(JSON.stringify({ success: false, message: 'Could not deliver.' }), { status: 502 }),
