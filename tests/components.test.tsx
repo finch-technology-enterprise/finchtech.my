@@ -52,8 +52,8 @@ describe('Footer', () => {
 
   it('links to local privacy/terms', () => {
     render(<Footer />);
-    expect(screen.getByRole('link', { name: /^Privacy$/ })).toHaveAttribute('href', '/privacy');
-    expect(screen.getByRole('link', { name: /^Terms$/ })).toHaveAttribute('href', '/terms');
+    expect(screen.getByRole('link', { name: /Privacy Policy/ })).toHaveAttribute('href', '/privacy');
+    expect(screen.getByRole('link', { name: /Terms of Service/ })).toHaveAttribute('href', '/terms');
   });
 });
 

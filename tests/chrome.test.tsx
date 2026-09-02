@@ -12,6 +12,6 @@ describe('Chrome Saasland', () => {
     const nexmenu = screen.getAllByRole('link', { name: /NexMenu/i }).find((a) => a.getAttribute('href') === 'https://nexmenu.my');
     expect(nexmenu).toBeDefined();
     expect(nexmenu).toHaveAttribute('href', expect.stringContaining('nexmenu.my'));
-    expect(screen.getByRole('link', { name: /^Privacy$/i })).toHaveAttribute('href', '/privacy');
+    expect(screen.getByRole('link', { name: /Privacy Policy/i })).toHaveAttribute('href', '/privacy');
   });
 });

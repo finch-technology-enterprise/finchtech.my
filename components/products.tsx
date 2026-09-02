@@ -88,7 +88,7 @@ export default function Products() {
                 </span>
                 <CardTitle>NexMenu</CardTitle>
               </div>
-              <CardDescription>QR ordering for F&B — scan, order, pay.</CardDescription>
+              <CardDescription>QR ordering for F&B — scan, order, pay. From RM0/month.</CardDescription>
             </CardHeader>
             <CardContent className="flex flex-1 flex-col">
               <div className="flex flex-wrap gap-1.5" aria-hidden>
@@ -112,6 +112,16 @@ export default function Products() {
                 className="group/link mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-slate-900 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
               >
                 Visit NexMenu
+                <ArrowUpRight
+                  className="h-3.5 w-3.5 transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+                  aria-hidden
+                />
+              </a>
+              <a
+                href="/pricing"
+                className="group/link mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-300"
+              >
+                View pricing
                 <ArrowUpRight
                   className="h-3.5 w-3.5 transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
                   aria-hidden
