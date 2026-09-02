@@ -5,7 +5,7 @@ import { Section, SectionHeading } from '@/components/ui/section';
 import { TrackedLink } from '@/components/ui/tracked-link';
 import { Reveal } from '@/components/ui/reveal';
 import { COMPANY, MAILTO, whatsappUrl } from '@/lib/company';
-import { breadcrumbSchema, jsonLd, localBusinessSchema } from '@/lib/schema';
+import { breadcrumbSchema, jsonLd } from '@/lib/schema';
 
 export const metadata: Metadata = {
   title: 'Company',
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 const PRINCIPLES = [
   {
     title: 'We operate what we build',
-    body: 'We are not a studio that ships a project and moves on. The people who write our software also deploy it, monitor it and answer the support mail — so problems reach the people who can actually fix them.',
+    body: 'We are not a studio that ships a project and moves on. The people who write our software also deploy it, monitor it and answer the support mail — so problems reach the people who can fix them.',
   },
   {
     title: 'Local problems, properly solved',
@@ -52,7 +52,6 @@ const PRINCIPLES = [
 export default function CompanyPage() {
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={jsonLd(localBusinessSchema())} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={jsonLd(

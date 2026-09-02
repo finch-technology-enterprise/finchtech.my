@@ -31,7 +31,7 @@ const PAGES = [
   { name: '/products', Component: ProductsPage, heading: /Software we build and operate/i },
   { name: '/products/nexmenu', Component: NexMenuPage, heading: /NexMenu — ordering and operations/i },
   { name: '/products/geraiku', Component: GeraiKuPage, heading: /GeraiKu — open an online store/i },
-  { name: '/capabilities', Component: CapabilitiesPage, heading: /What we have actually built/i },
+  { name: '/capabilities', Component: CapabilitiesPage, heading: /What we have built/i },
   { name: '/company', Component: CompanyPage, heading: /A Malaysian software company/i },
   { name: '/contact', Component: ContactPage, heading: /Talk to Finch Technology/i },
   { name: '/legal', Component: LegalHubPage, heading: /Policies and company information/i },

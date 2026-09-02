@@ -36,9 +36,9 @@ export function Hero() {
           </h1>
 
           <p className="text-lead mt-6 max-w-xl text-fg-muted">
-            Finch Technology builds and operates cloud software for businesses in Malaysia. Our
-            main product, <strong className="font-semibold text-fg">NexMenu</strong>, runs ordering,
-            payments and kitchen operations for cafes and restaurants — live, every day.
+            Finch Technology builds and operates cloud software for businesses in Malaysia. Our main
+            product, <strong className="font-semibold text-fg">NexMenu</strong>, handles ordering,
+            payments and kitchen operations for cafes and restaurants across the country.
           </p>
 
           <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:flex-wrap">

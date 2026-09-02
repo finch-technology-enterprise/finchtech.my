@@ -68,7 +68,7 @@ export function ClosingCta() {
             </p>
             <div className="mt-6 flex flex-col gap-2.5">
               <TrackedLink
-                href={whatsappUrl('working with Finch Technology')}
+                href={whatsappUrl('your products')}
                 event="whatsapp_click"
                 placement="closing_whatsapp"
                 attribute={false}

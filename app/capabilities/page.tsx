@@ -32,7 +32,7 @@ export default function CapabilitiesPage() {
         <SectionHeading
           as="h1"
           eyebrow="Capabilities"
-          title="What we have actually built"
+          title="What we have built"
           lead="Everything below is in production in our own products. We list it here so anyone evaluating Finch — as a supplier, an integration partner or a payment provider — can see the specific ground we cover."
           className="max-w-3xl"
         />
@@ -74,7 +74,7 @@ export default function CapabilitiesPage() {
             </div>
             <div className="flex flex-col gap-3">
               <TrackedLink
-                href={whatsappUrl('an integration or partnership')}
+                href={whatsappUrl('an integration')}
                 event="whatsapp_click"
                 placement="capabilities_cta"
                 attribute={false}

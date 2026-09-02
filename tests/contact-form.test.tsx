@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ContactForm } from '@/components/contact-form';
 
@@ -140,5 +140,67 @@ describe('ContactForm', () => {
     render(<ContactForm />);
     const status = screen.getByRole('status');
     expect(status).toHaveAttribute('aria-live', 'polite');
+  });
+
+  /**
+   * The production defect this guards:
+   *
+   * With TURNSTILE_SECRET_KEY configured, the server correctly rejects any
+   * submission without a verified token. But if the challenge host is blocked
+   * (corporate network, ad blocker), the widget never renders — so the customer
+   * saw a 4-second toast saying "please try again" against a check they could
+   * never complete, with the form still enabled. A permanent dead end.
+   *
+   * The form must now explain the situation persistently and offer channels
+   * that work.
+   */
+  it('shows a persistent fallback with WhatsApp and email when the challenge is rejected', async () => {
+    globalThis.fetch = vi.fn(async () =>
+      new Response(
+        JSON.stringify({
+          success: false,
+          challengeFailed: true,
+          message: 'We could not complete the spam check. Please message us on WhatsApp or email instead.',
+        }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } },
+      ),
+    ) as unknown as typeof fetch;
+
+    const user = userEvent.setup();
+    render(<ContactForm />);
+    await fillValid(user);
+    await user.click(screen.getByRole('button', { name: /send enquiry/i }));
+
+    // A persistent alert, not a transient toast.
+    const alert = await screen.findByRole('alert');
+    expect(alert).toBeInTheDocument();
+    expect(alert.textContent).toMatch(/can't be sent from your connection/i);
+
+    // Both working channels are offered.
+    const whatsapp = within(alert).getByRole('link', { name: /whatsapp/i });
+    expect(whatsapp.getAttribute('href')).toContain('wa.me/');
+    const email = within(alert).getByRole('link', { name: /finchtech\.my/i });
+    expect(email.getAttribute('href')).toContain('mailto:');
+
+    // Submitting again cannot succeed, so the button is disabled.
+    expect(screen.getByRole('button', { name: /send enquiry/i })).toBeDisabled();
+
+    // Never blames the visitor or leaks configuration.
+    expect(alert.textContent).not.toMatch(/TURNSTILE|NEXT_PUBLIC/i);
+  });
+
+  it('does not show the fallback for an ordinary server error', async () => {
+    globalThis.fetch = vi.fn(async () =>
+      new Response(JSON.stringify({ success: false, message: 'Could not deliver.' }), { status: 502 }),
+    ) as unknown as typeof fetch;
+
+    const user = userEvent.setup();
+    render(<ContactForm />);
+    await fillValid(user);
+    await user.click(screen.getByRole('button', { name: /send enquiry/i }));
+
+    await waitFor(() => expect(toastError).toHaveBeenCalledWith('Could not deliver.'));
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(screen.getByRole('button', { name: /send enquiry/i })).not.toBeDisabled();
   });
 });

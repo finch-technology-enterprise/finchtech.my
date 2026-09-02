@@ -97,6 +97,40 @@ describe('POST /api/contact', () => {
     expect(kvPut).not.toHaveBeenCalled();
   });
 
+  it('flags challenge rejections so the client can show a working fallback', async () => {
+    fetchMock.mockImplementation(async (url: string | URL | Request) => {
+      if (String(url).includes('turnstile')) {
+        return new Response(JSON.stringify({ success: false }), { status: 200 });
+      }
+      return new Response('{}', { status: 200 });
+    });
+    const { POST } = await import('@/app/api/contact/route');
+    const res = await POST(req(validBody));
+    const json = (await res.json()) as { challengeFailed?: boolean; message: string };
+    expect(res.status).toBe(400);
+    expect(json.challengeFailed).toBe(true);
+    // Must point at a channel that works, not tell the user to retry forever.
+    expect(json.message).toMatch(/WhatsApp|email/i);
+  });
+
+  it('never accepts an unverified submission while a secret is configured', async () => {
+    // Guards against "fix" the graceful-degradation path by simply accepting
+    // missing tokens, which would be a trivial anti-spam bypass.
+    const { POST } = await import('@/app/api/contact/route');
+    for (const token of ['', 'forged', undefined]) {
+      const body = { ...validBody, turnstileToken: token };
+      if (token === undefined) delete (body as Record<string, unknown>).turnstileToken;
+      fetchMock.mockImplementation(async (url: string | URL | Request) =>
+        String(url).includes('turnstile')
+          ? new Response(JSON.stringify({ success: false }), { status: 200 })
+          : new Response('{}', { status: 200 }),
+      );
+      const res = await POST(req(body));
+      expect(res.status, `token=${String(token)} must be rejected`).toBe(400);
+    }
+    expect(kvPut).not.toHaveBeenCalled();
+  });
+
   it('rejects a failed challenge when verification is configured', async () => {
     fetchMock.mockImplementation(async (url: string | URL | Request) => {
       if (String(url).includes('turnstile')) {
