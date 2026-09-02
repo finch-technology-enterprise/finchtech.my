@@ -75,6 +75,8 @@ export function ContactForm() {
    * letting the customer retry into a permanent 400.
    */
   const [challengeUnavailable, setChallengeUnavailable] = React.useState(false);
+  /** Challenge is available but the visitor has not completed it yet. */
+  const [challengeIncomplete, setChallengeIncomplete] = React.useState(false);
 
   const widgetRef = React.useRef<HTMLDivElement>(null);
   const widgetIdRef = React.useRef<string | null>(null);
@@ -99,6 +101,7 @@ export function ContactForm() {
         callback: (t: string) => {
           setToken(t);
           setChallengeUnavailable(false);
+          setChallengeIncomplete(false);
         },
         'expired-callback': () => setToken(''),
         'error-callback': () => {
@@ -150,6 +153,17 @@ export function ContactForm() {
       if (firstKey) document.getElementById(`contact-${firstKey}`)?.focus();
       return;
     }
+
+    // The challenge is present but not yet solved. That is a different problem
+    // from the challenge being unreachable: the visitor can fix it by
+    // completing the check, so ask them to — do not send them to WhatsApp, and
+    // do not spend a request on a submission the server will reject.
+    if (siteKey && !challengeUnavailable && !token) {
+      setChallengeIncomplete(true);
+      widgetRef.current?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      return;
+    }
+    setChallengeIncomplete(false);
 
     setErrors({});
     setPending(true);
@@ -316,7 +330,16 @@ export function ContactForm() {
       </div>
 
       {/* Anti-bot widget. Never surfaces configuration details to the visitor. */}
-      {siteKey ? <div ref={widgetRef} className={challengeUnavailable ? 'hidden' : 'min-h-[65px]'} /> : null}
+      {siteKey ? (
+        <div>
+          <div ref={widgetRef} className={challengeUnavailable ? 'hidden' : 'min-h-[65px]'} />
+          {challengeIncomplete ? (
+            <p role="alert" className="mt-2 text-sm text-danger">
+              Please complete the spam check above, then send your enquiry.
+            </p>
+          ) : null}
+        </div>
+      ) : null}
 
       {/* Challenge cannot run — the server will reject any submission, so give
           the customer an honest explanation and a channel that actually works
