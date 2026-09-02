@@ -154,6 +154,31 @@ Delete an enquiry once handled:
 npx wrangler kv key delete "<key>" --namespace-id 12ae7be74225482fbe9556d2b00748b9 --remote
 ```
 
+Deleting is also how you mark an enquiry as read: the KV namespace holds only
+**pending** enquiries, so an empty `npm run leads` means nothing is outstanding.
+There is deliberately no read/unread flag and no admin UI — the store is a
+safety net, not an inbox.
+
+### Alerting on unnotified leads
+
+An email notification policy already exists on the account:
+
+- **Name:** `Unnotified contact lead in KV`
+- **Type:** `workers_observability_alert` → **Destination:** `support@finchtech.my`
+- **Policy ID:** `e895ff7d1ace4684826c4a387b0a0dfb`
+
+That is the *delivery* half. The *rule* that fires it must be created once in the
+dashboard (the alert-rule API is undocumented, so it is not scripted here):
+
+1. **Workers & Pages → Observability → Investigate**
+2. Filter: `$metadata.service = finchtech-my-frontend` **AND**
+   `$metadata.level = error`, with the search needle `UNNOTIFIED_LEAD_IN_KV`
+3. **Create alert** from that query — threshold `count >= 1` over `5 minutes`
+4. Attach the existing notification policy above
+
+Until step 3 is done, detection is manual: run `npm run leads`, or query the
+same filter in the dashboard.
+
 ### If you want real CI
 
 Connect the repo in the dashboard (Workers & Pages → `finchtech-my-frontend` →
