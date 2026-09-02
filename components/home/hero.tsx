@@ -77,10 +77,10 @@ export function Hero() {
         <div className="relative mx-auto w-full max-w-[560px] lg:mx-0">
           <div className="screenshot">
             <Image
-              src="/images/products/kds-live-orders.png"
+              src="/images/products/kds-live-orders.webp"
               alt="The NexMenu kitchen display showing live order tickets as they arrive from the storefront"
-              width={1440}
-              height={900}
+              width={1200}
+              height={750}
               priority
               sizes="(max-width: 1023px) 92vw, 46vw"
               className="h-auto w-full"
@@ -89,7 +89,7 @@ export function Hero() {
 
           <div className="absolute -bottom-8 -left-2 w-[34%] max-w-[168px] overflow-hidden rounded-2xl border border-border bg-surface shadow-panel sm:-left-6 sm:w-[36%]">
             <Image
-              src="/images/products/storefront-menu.png"
+              src="/images/products/storefront-menu.webp"
               alt="The NexMenu customer storefront on a phone, showing a cafe menu with category filters and item cards"
               width={390}
               height={844}

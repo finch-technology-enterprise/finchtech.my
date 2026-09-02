@@ -110,10 +110,10 @@ export function NexMenuSpotlight() {
         <Reveal delay={80}>
           <div className="screenshot">
             <Image
-              src="/images/products/dashboard-open-tables.png"
+              src="/images/products/dashboard-open-tables.webp"
               alt="The NexMenu dashboard listing open table sessions with running totals and settle actions"
-              width={1440}
-              height={1092}
+              width={1200}
+              height={910}
               sizes="(max-width: 1023px) 92vw, 50vw"
               className="h-auto w-full"
             />

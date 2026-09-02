@@ -96,10 +96,10 @@ export default function ProductsPage() {
                 <div className="relative border-t border-border bg-nexmenu-soft p-6 sm:p-8 lg:border-l lg:border-t-0">
                   <div className="overflow-hidden rounded-lg border border-nexmenu-border shadow-lift">
                     <Image
-                      src="/images/products/kds-live-orders.png"
+                      src="/images/products/kds-live-orders.webp"
                       alt="The NexMenu kitchen display showing live order tickets grouped by preparation status"
-                      width={1440}
-                      height={900}
+                      width={1200}
+                      height={750}
                       sizes="(max-width: 1023px) 92vw, 52vw"
                       className="h-auto w-full"
                     />
@@ -162,10 +162,10 @@ export default function ProductsPage() {
                 <div className="relative border-t border-border bg-geraiku-soft p-6 sm:p-8 lg:border-l lg:border-t-0">
                   <div className="overflow-hidden rounded-lg border border-geraiku-border shadow-lift">
                     <Image
-                      src="/images/products/geraiku-storefront.png"
+                      src="/images/products/geraiku-storefront.webp"
                       alt="The GeraiKu homepage showing the free online store builder for Malaysian small businesses"
-                      width={1440}
-                      height={900}
+                      width={1200}
+                      height={750}
                       loading="lazy"
                       sizes="(max-width: 1023px) 92vw, 52vw"
                       className="h-auto w-full"
