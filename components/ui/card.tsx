@@ -1,53 +1,56 @@
 import * as React from 'react';
 import { cn } from '@/lib/utils';
 
-const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
+/**
+ * One card component with variants, replacing the three parallel card
+ * treatments the audit found (Card primitive / bento div / tinted panel).
+ */
+export function Card({
+  className,
+  interactive = false,
+  tone = 'default',
+  ...props
+}: React.HTMLAttributes<HTMLDivElement> & {
+  interactive?: boolean;
+  tone?: 'default' | 'sunken' | 'brand' | 'inverse';
+}) {
+  return (
     <div
-      ref={ref}
       className={cn(
-        'card rounded-2xl border border-slate-200 bg-white text-card-foreground shadow-sm',
+        'card rounded-xl border shadow-card',
+        tone === 'default' && 'border-border bg-surface',
+        tone === 'sunken' && 'border-border bg-surface-sunken',
+        tone === 'brand' && 'border-brand-200 bg-brand-50',
+        tone === 'inverse' && 'border-white/12 bg-white/[0.06]',
+        interactive &&
+          'transition-[transform,box-shadow,border-color] duration-200 ease-[var(--ease-standard)] hover:-translate-y-0.5 hover:border-border-strong hover:shadow-lift',
         className,
       )}
       {...props}
     />
-  ),
-);
-Card.displayName = 'Card';
+  );
+}
 
-const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('flex flex-col space-y-1.5 p-6', className)} {...props} />
-  ),
-);
-CardHeader.displayName = 'CardHeader';
-
-const CardTitle = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLHeadingElement>>(
-  ({ className, ...props }, ref) => (
-    <h3 ref={ref} className={cn('font-semibold leading-none tracking-tight', className)} {...props} />
-  ),
-);
-CardTitle.displayName = 'CardTitle';
-
-const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
-  ({ className, ...props }, ref) => (
-    <p ref={ref} className={cn('text-sm leading-relaxed text-slate-600', className)} {...props} />
-  ),
-);
-CardDescription.displayName = 'CardDescription';
-
-const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('p-6 pt-0', className)} {...props} />
-  ),
-);
-CardContent.displayName = 'CardContent';
-
-const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn('flex items-center p-6 pt-0', className)} {...props} />
-  ),
-);
-CardFooter.displayName = 'CardFooter';
-
-export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter };
+/** Small labelled pill used for facts, tags and metadata. */
+export function Badge({
+  className,
+  tone = 'neutral',
+  ...props
+}: React.HTMLAttributes<HTMLSpanElement> & {
+  tone?: 'neutral' | 'brand' | 'nexmenu' | 'geraiku' | 'inverse';
+}) {
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-eyebrow font-medium',
+        tone === 'neutral' && 'border-border bg-surface-sunken text-fg-muted',
+        tone === 'brand' && 'border-brand-200 bg-brand-50 text-brand-700',
+        tone === 'nexmenu' && 'border-nexmenu-border bg-nexmenu-soft text-nexmenu',
+        tone === 'geraiku' && 'border-geraiku-border bg-geraiku-soft text-geraiku',
+        tone === 'inverse' && 'border-white/25 bg-white/10 text-white',
+        className,
+      )}
+      {...props}
+    />
+  );
+}

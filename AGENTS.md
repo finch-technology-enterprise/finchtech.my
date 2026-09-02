@@ -14,7 +14,7 @@ Guidance for any coding agent working in this repo.
 2. Develop on `feature/*` or `hotfix/*` (branched from latest `production`).
 3. Verify locally: `npm run typecheck && npm run lint -- --max-warnings=0 && npm run build && npm run test` and `npx opennextjs-cloudflare build`. Browser walkthrough via Chrome DevTools MCP against `npm run dev` on `http://localhost:3000`.
 4. Open PR against `production` using `.github/pull_request_template.md`; auto-review → owner confirmation → `npm run merge:local -- feature/<desc> <reviewed-head-sha>` then push `production` once (`production` has no GitHub branch protection — hook + confirmation are the gate).
-5. Production deploy is Cloudflare Workers Builds on each `production` push → `finchtech.my/*` + `www.finchtech.my/*` (zone routes, not `wrangler.toml [[routes]]`). Smoke: `curl https://finchtech.my/api/health`.
+5. **Production deploy is MANUAL — there is no CI.** Pushing `production` deploys nothing. Run `npm run deploy` (`opennextjs-cloudflare build && deploy`), then `npm run smoke` (required — verifies every route, redirect and regression against the live origin). Verified 2026-09-02: the Worker has no Workers Builds repo connection and zero build records; all deployments are `source: wrangler`. A stale-production incident caused by the previous "CI deploys on push" claim is documented in `README.md:Deploy`.
 
 ## Dependencies
 
