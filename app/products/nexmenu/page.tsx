@@ -136,7 +136,7 @@ export default function NexMenuPage() {
           <Reveal>
             <div className="screenshot">
               <Image
-                src="/images/products/storefront-checkout.png"
+                src="/images/products/storefront-checkout.webp"
                 alt="The NexMenu checkout on a phone, showing an order summary and the place order button"
                 width={390}
                 height={844}
@@ -193,10 +193,10 @@ export default function NexMenuPage() {
           <Reveal>
             <div className="screenshot">
               <Image
-                src="/images/products/dashboard-open-tables.png"
+                src="/images/products/dashboard-open-tables.webp"
                 alt="The NexMenu dashboard showing open table sessions with live totals and settle buttons"
-                width={1440}
-                height={1092}
+                width={1200}
+                height={910}
                 loading="lazy"
                 sizes="(max-width: 1023px) 92vw, 52vw"
                 className="h-auto w-full"

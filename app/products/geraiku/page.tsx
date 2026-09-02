@@ -106,10 +106,10 @@ export default function GeraiKuPage() {
           <Reveal>
             <div className="screenshot">
               <Image
-                src="/images/products/geraiku-storefront.png"
+                src="/images/products/geraiku-storefront.webp"
                 alt="The GeraiKu homepage showing store themes and the free plan for Malaysian small businesses"
-                width={1440}
-                height={900}
+                width={1200}
+                height={750}
                 priority
                 sizes="(max-width: 1023px) 92vw, 52vw"
                 className="h-auto w-full"
